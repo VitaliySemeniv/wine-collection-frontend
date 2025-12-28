@@ -1,0 +1,124 @@
+@import '../../utils/main';
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  &__top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding-block: 20px;
+    // @include content-padding-inline;
+
+    background-color: $header-bg-color;
+    box-shadow: 0 1px 0 0 $gray-elements-color;
+  }
+
+  &__nav {
+    display: none;
+
+    @include on-tablet {
+      display: flex;
+    }
+  }
+
+  &__list {
+    @include on-tablet {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 32px;
+    }
+
+    @include on-desktop {
+      gap: 64px;
+    }
+  }
+
+  &__link {
+    position: relative;
+    color: $main-color;
+    text-decoration: none;
+
+    @extend %link;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      display: block;
+      height: 0.5px;
+      width: 100%;
+      background-color: $main-color;
+
+      transition: transform 0.4s;
+      transform: scale(0);
+      transform-origin: left;
+    }
+
+    &:hover::after {
+      transform: scale(1);
+    }
+
+    &--active::after {
+      transform: scaleX(1);
+    }
+  }
+
+  &__logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding-left: 16px;
+
+    @include on-desktop {
+      padding-left: 24px;
+    }
+  }
+
+  &__logo {
+    height: 22px;
+    width: 64px;
+
+    @include on-desktop {
+      height: 100px;
+      width: 100px;
+    }
+
+    @include hover(transform, scale(1.1));
+  }
+
+  &__icons-wrapper {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    background-color: $header-bg-color;
+
+    @include on-tablet {
+      display: none;
+    }
+  }
+
+  &__icons-container {
+    display: flex;
+    flex-direction: row;
+
+    padding-right: 16px;
+
+    @include on-desktop {
+      padding-right: 24px;
+    }
+  }
+
+  &__icons {
+    display: none;
+
+    @include on-tablet {
+      display: flex;
+    }
+  }
+}
