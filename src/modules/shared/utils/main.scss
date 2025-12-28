@@ -1,0 +1,9 @@
+@import './reset';
+@import './variables';
+@import './mixins';
+@import './extends';
+
+body {
+  background-color: $page-bg-color;
+  font-family: $main-font;
+}
