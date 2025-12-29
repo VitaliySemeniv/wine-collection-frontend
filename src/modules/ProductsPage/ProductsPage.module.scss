@@ -1,0 +1,81 @@
+@import '../shared/utils/main';
+
+.products {
+  &__wrapper {
+    margin-bottom: 64px;
+
+    @include content-padding-inline;
+
+    @include on-desktop {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__header {
+    margin-bottom: 40px;
+
+    @extend %h1;
+
+    color: var(--gray-primary-color);
+  }
+
+  &__container {
+    @include page-grid;
+
+    gap: 32px;
+  }
+
+  &__drop-downs {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+
+    grid-column: 1 / -1;
+
+    @include on-desktop {
+      grid-column: 1 / 6;
+    }
+  }
+
+  &__drop-down {
+    width: 136px;
+
+    @include on-tablet {
+      width: 187px;
+    }
+
+    @include on-desktop {
+      width: 176px;
+    }
+  }
+
+  &__items {
+    grid-column: 1 / -1;
+
+    @include on-desktop {
+      grid-column: 6 / -1;
+    }
+  }
+
+  &__items-header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+    @include on-desktop {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &__title {
+    @extend %h2;
+  }
+
+  &__title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
