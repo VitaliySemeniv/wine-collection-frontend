@@ -1,0 +1,58 @@
+@import '../../../shared/utils/main.scss';
+
+.about {
+  position: relative;
+  height: 514px;
+  background-image: url('/images/about-wine.png');
+  background-size: cover;
+  background-position: center;
+
+  &__overlay {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  &__wrapper {
+    padding-block: 20px;
+
+    @include content-padding-inline;
+
+    @include on-tablet {
+      padding-block: 40px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 14px;
+
+    @extend %h2;
+
+    text-transform: uppercase;
+
+    @include on-tablet {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__content {
+    max-width: 420px;
+    padding: 25px;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.85);
+    text-align: justify;
+  }
+
+  &__subtitle {
+    margin-bottom: 15px;
+
+    @extend %price;
+  }
+
+  &__text {
+    margin-bottom: 10px;
+
+    @extend %body-text-14;
+  }
+}

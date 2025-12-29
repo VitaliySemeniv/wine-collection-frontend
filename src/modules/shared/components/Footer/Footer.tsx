@@ -4,7 +4,7 @@ import { Icon } from '../Icon';
 
 export const Footer = () => {
   return (
-    <footer className={styles.footer}>
+    <footer id="contacts" className={styles.footer}>
       <div className={styles.footer__wrapper}>
         <div className={styles.footer__content}>
           <div className={styles.footer__about}>
