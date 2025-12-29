@@ -29,7 +29,7 @@ export const Header: React.FC = () => {
                     {link.title}
                   </NavLink>
                 ) : (
-                  <a href={link.path} className={styles.header__link}>
+                  <a key={link.title} href={link.path} className={styles.header__link}>
                     {link.title}
                   </a>
                 ),
