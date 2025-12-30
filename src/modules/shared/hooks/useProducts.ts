@@ -1,12 +1,27 @@
-import { useContext } from 'react';
-import { ProductsContext } from '../context/ProductsContext';
+import { useEffect, useState } from 'react';
+import { getProducts } from '../api/products';
+import type { ProductsParams } from '../api/products';
+import type { Product } from '../../../types/Product';
 
-export const useProducts = () => {
-  const productsContext = useContext(ProductsContext);
+export const useProducts = (params: ProductsParams) => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  if (!productsContext) {
-    throw new Error('useProducts must be used within ProductsProvider');
-  }
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoading(true);
+    setError(false);
 
-  return productsContext;
+    getProducts(params)
+      .then(({ products, total }) => {
+        setProducts(products);
+        setTotal(total);
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+  }, [params]);
+
+  return { products, total, loading, error };
 };
