@@ -6,9 +6,12 @@ import { Breadcrumbs } from '../shared/components/Breadcrumbs';
 import { ProductsList } from '../shared/components/ProductList';
 import { DropDown } from '../shared/components/DropDown/DropDown';
 import { Loader } from '../shared/components/Loader';
+import { Filters } from '../shared/components/Filters';
 
 import styles from './ProductsPage.module.scss';
-import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { Chip, IconButton, InputAdornment, TextField } from '@mui/material';
+import { useTheme, useMediaQuery, Button, Drawer } from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -16,67 +19,39 @@ import debounce from 'lodash.debounce';
 
 export const ProductsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [wineOpen, setWineOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
 
-  const sort = searchParams.get('sort') ?? 'age';
-  const perPageParam = searchParams.get('perPage');
-  const pageParam = Number(searchParams.get('page')) || 1;
+  const params = useMemo(() => Object.fromEntries(searchParams.entries()), [searchParams]);
+  const [searchValue, setSearchValue] = useState(params.query ?? '');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const query = searchParams.get('query')?.toLowerCase() || '';
+  const { products, total, loading } = useProducts(params);
 
-  const perPage = !perPageParam || perPageParam === 'all' ? null : Number(perPageParam);
-
-  const currentPage = Math.max(1, pageParam);
-
-  const { products } = useProducts();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 500);
-
-    return () => clearTimeout(timer);
-  }, [products]);
-
-  const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products;
-
-    if (query) {
-      filtered = products.filter((product) => product.name.toLowerCase().includes(query));
-    }
-
-    if (sort) {
-      switch (sort) {
-        case 'price':
-          filtered = [...filtered].sort((p1, p2) => p1.price - p2.price);
-          break;
-        case 'title':
-          filtered = [...filtered].sort((p1, p2) => p1.name.localeCompare(p2.name));
-          break;
-      }
-    }
-
-    return filtered;
-  }, [products, sort, query]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const updateQuery = useMemo(
     () =>
       debounce((value: string) => {
-        const params = new URLSearchParams(searchParams);
+        const nextParams = new URLSearchParams(searchParams);
 
         if (value) {
-          params.set('query', value);
+          nextParams.set('query', value);
         } else {
-          params.delete('query');
+          nextParams.delete('query');
         }
 
-        params.set('page', '1');
-        setSearchParams(params);
-      }, 400),
+        nextParams.set('page', '1');
+        setSearchParams(nextParams);
+      }, 500),
     [searchParams, setSearchParams],
   );
 
-  const handleQueryChange = (value: string) => {
-    updateQuery(value);
-  };
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSearchValue(params.query ?? '');
+  }, [params.query]);
 
   useEffect(() => {
     return () => {
@@ -84,13 +59,36 @@ export const ProductsPage = () => {
     };
   }, [updateQuery]);
 
+  const toggleParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams);
+    const current = params.getAll(key);
+
+    if (current.includes(value)) {
+      params.delete(key);
+      current.filter((v) => v !== value).forEach((v) => params.append(key, v));
+    } else {
+      params.append(key, value);
+    }
+
+    params.set('page', '1');
+    setSearchParams(params);
+  };
+
+  const filterLabels: Record<string, string> = {
+    gift: '🎁 На подарунок',
+    dinner: '🍽️ До вечері',
+    celebration: '🎉 Святкування',
+    romantic: '💖 Романтичний',
+    festive: '🎄 Святковий',
+    relaxed: '😌 Розслаблений',
+  };
+
+  const priceMin = searchParams.get('priceMin');
+  const priceMax = searchParams.get('priceMax');
+
   if (loading) {
     return <Loader />;
   }
-
-  const startIndex = perPage ? (currentPage - 1) * perPage : 0;
-  const endIndex = perPage ? startIndex + perPage : filteredAndSortedProducts.length;
-  const currentItems = filteredAndSortedProducts.slice(startIndex, endIndex);
 
   return (
     <section className={styles.products}>
@@ -100,14 +98,61 @@ export const ProductsPage = () => {
         <h1 className={styles.products__header}>Колекція вин</h1>
 
         <div className={styles.products__container}>
+          {!isMobile && (
+            <Filters
+              wineOpen={wineOpen}
+              setWineOpen={setWineOpen}
+              countryOpen={countryOpen}
+              setCountryOpen={setCountryOpen}
+              toggleParam={toggleParam}
+            />
+          )}
+
+          {isMobile && (
+            <Drawer
+              anchor="left"
+              open={filtersOpen}
+              onClose={() => setFiltersOpen(false)}
+              PaperProps={{
+                sx: {
+                  width: '85%',
+                  maxWidth: 360,
+                  padding: 2,
+                },
+              }}
+            >
+              <Filters
+                wineOpen={wineOpen}
+                setWineOpen={setWineOpen}
+                countryOpen={countryOpen}
+                setCountryOpen={setCountryOpen}
+                toggleParam={toggleParam}
+              />
+            </Drawer>
+          )}
+
           <div className={styles.products__items}>
             <TextField
               fullWidth
               size="small"
               placeholder="Пошук вина…"
-              value={query}
-              onChange={(e) => handleQueryChange(e.target.value)}
-              sx={{ mb: 4, '& .MuiOutlinedInput-root': { borderRadius: '20px' } }}
+              value={searchValue}
+              onChange={(e) => {
+                const value = e.target.value;
+                setSearchValue(value);
+                updateQuery(value);
+              }}
+              sx={{
+                mb: 4,
+                '& .MuiOutlinedInput-root': { borderRadius: '20px' },
+                '& .MuiInputBase-input': {
+                  fontFamily: '"Playfair Display", "Times New Roman", serif',
+                },
+                '& .MuiInputBase-input::placeholder': {
+                  fontFamily: '"Playfair Display", "Times New Roman", serif',
+                  opacity: 0.6,
+                },
+              }}
               slotProps={{
                 input: {
                   startAdornment: (
@@ -115,9 +160,15 @@ export const ProductsPage = () => {
                       <SearchIcon />
                     </InputAdornment>
                   ),
-                  endAdornment: query ? (
+                  endAdornment: searchValue ? (
                     <InputAdornment position="end">
-                      <IconButton size="small" onClick={() => handleQueryChange('')}>
+                      <IconButton
+                        size="small"
+                        onClick={() => {
+                          setSearchValue('');
+                          updateQuery('');
+                        }}
+                      >
                         <CloseIcon />
                       </IconButton>
                     </InputAdornment>
@@ -126,12 +177,29 @@ export const ProductsPage = () => {
               }}
             />
 
+            {isMobile && (
+              <Button
+                variant="outlined"
+                startIcon={<FilterListIcon />}
+                onClick={() => setFiltersOpen(true)}
+                sx={{
+                  mb: 2,
+                  borderRadius: '20px',
+                  fontFamily: '"Playfair Display", serif',
+                  color: '#7a1e2d',
+                  borderColor: '#7a1e2d',
+                }}
+              >
+                Фільтри
+              </Button>
+            )}
+
             <div className={styles['products__items-header']}>
               <div className={styles['products__title-wrapper']}>
                 <h2 className={styles.products__title}>Вина</h2>
 
                 <p className={styles.products__count}>
-                  {currentItems.length} товар{currentItems.length !== 1 && 'ів'}
+                  {total} товар{total !== 1 && 'ів'}
                 </p>
               </div>
 
@@ -142,9 +210,9 @@ export const ProductsPage = () => {
                     paramKey="sort"
                     defaultValue="age"
                     options={[
-                      { value: 'age', label: 'Newest' },
-                      { value: 'title', label: 'Alphabetically' },
-                      { value: 'price', label: 'Cheapest' },
+                      { value: 'age', label: 'Новинки' },
+                      { value: 'title', label: 'Назва' },
+                      { value: 'price', label: 'Від дешевих → дорогих' },
                     ]}
                   />
                 </div>
@@ -153,9 +221,8 @@ export const ProductsPage = () => {
                   <DropDown
                     label="Товарів на сторінці:"
                     paramKey="perPage"
-                    defaultValue="all"
+                    defaultValue="8"
                     options={[
-                      { value: 'all', label: 'All' },
                       { value: '4', label: '4' },
                       { value: '8', label: '8' },
                       { value: '16', label: '16' },
@@ -165,7 +232,66 @@ export const ProductsPage = () => {
               </div>
             </div>
 
-            <ProductsList products={currentItems} />
+            <div className={styles['products__selected-filters']}>
+              {priceMin && priceMax && (
+                <Chip
+                  label={`₴ ${priceMin} – ${priceMax}`}
+                  onDelete={() => {
+                    const nextParams = new URLSearchParams(searchParams);
+                    nextParams.delete('priceMin');
+                    nextParams.delete('priceMax');
+                    setSearchParams(nextParams);
+                  }}
+                  variant="outlined"
+                  sx={{
+                    fontFamily: '"Playfair Display", serif',
+                    fontSize: '14px',
+                    border: '1px solid #000',
+                    mr: 1,
+                    mb: 1,
+                  }}
+                />
+              )}
+
+              {Object.keys(params).map((key) =>
+                key !== 'query' && key !== 'page' && key !== 'priceMin' && key !== 'priceMax'
+                  ? searchParams.getAll(key).map((value) => (
+                      <Chip
+                        key={`${key}-${value}`}
+                        label={filterLabels[value] ?? value}
+                        onDelete={() => toggleParam(key, value)}
+                        variant="outlined"
+                        sx={{
+                          fontFamily: '"Playfair Display", serif',
+                          fontSize: '14px',
+                          border: '1px solid #000',
+                          mr: 1,
+                          mb: 1,
+                        }}
+                      />
+                    ))
+                  : null,
+              )}
+
+              {(priceMin ||
+                priceMax ||
+                Object.keys(params).some((key) => key !== 'query' && key !== 'page')) && (
+                <button
+                  className={styles.products__reset}
+                  onClick={() => {
+                    const nextParams = new URLSearchParams(searchParams);
+                    ['purpose', 'mood', 'type', 'country', 'priceMin', 'priceMax'].forEach((k) =>
+                      nextParams.delete(k),
+                    );
+                    setSearchParams(nextParams);
+                  }}
+                >
+                  Скинути
+                </button>
+              )}
+            </div>
+
+            <ProductsList products={products} />
           </div>
         </div>
       </div>

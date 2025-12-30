@@ -34,7 +34,13 @@ export const DropDown: FC<Props> = ({ label, paramKey, defaultValue, options }) 
 
   return (
     <FormControl size="small" fullWidth>
-      <InputLabel>{label}</InputLabel>
+      <InputLabel
+        sx={{
+          fontFamily: '"Playfair Display", "Times New Roman", serif',
+        }}
+      >
+        {label}
+      </InputLabel>
 
       <Select
         value={value}

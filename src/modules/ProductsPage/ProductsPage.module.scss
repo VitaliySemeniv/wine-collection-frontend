@@ -29,12 +29,6 @@
     display: flex;
     flex-direction: row;
     gap: 16px;
-
-    grid-column: 1 / -1;
-
-    @include on-desktop {
-      grid-column: 1 / 6;
-    }
   }
 
   &__drop-down {
@@ -53,7 +47,7 @@
     grid-column: 1 / -1;
 
     @include on-desktop {
-      grid-column: 6 / -1;
+      grid-column: 7 / -1;
     }
   }
 
@@ -61,6 +55,7 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    margin-bottom: 20px;
     
     @include on-desktop {
       flex-direction: row;
@@ -77,5 +72,21 @@
     display: flex;
     align-items: center;
     gap: 10px;
+  }
+
+  &__selected-filters {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__reset {
+    font-family: $main-font;
+    font-size: 14px;
+    width: 80px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #7a1e2d;
+    color: $page-bg-color;
+    cursor: pointer;
   }
 }
