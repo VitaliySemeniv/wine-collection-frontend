@@ -1,10 +1,13 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import cn from 'classnames';
 import styles from './Header.module.scss';
 import { navLinks } from '../../../../constants/navLinks';
 import { Icon } from '../Icon';
 
 export const Header: React.FC = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
   return (
     <>
       <header className={styles.header}>
@@ -15,29 +18,48 @@ export const Header: React.FC = () => {
 
           <nav className={styles.header__nav}>
             <ul className={styles.header__list}>
-              {navLinks.map((link) =>
-                link.type === 'route' ? (
-                  <NavLink
-                    to={link.path}
-                    key={link.title}
-                    className={({ isActive }) =>
-                      cn(styles.header__link, {
-                        [styles['header__link--active']]: isActive,
-                      })
-                    }
-                  >
-                    {link.title}
-                  </NavLink>
-                ) : (
-                  <a key={link.title} href={link.path} className={styles.header__link}>
-                    {link.title}
-                  </a>
-                ),
-              )}
+              {navLinks
+                .filter((link) => {
+                  if (link.onlyHome) {
+                    return isHomePage;
+                  }
+
+                  return true;
+                })
+                .map((link) =>
+                  link.type === 'route' ? (
+                    <NavLink
+                      to={link.path}
+                      key={link.title}
+                      className={({ isActive }) =>
+                        cn(styles.header__link, {
+                          [styles['header__link--active']]: isActive,
+                        })
+                      }
+                    >
+                      {link.title}
+                    </NavLink>
+                  ) : (
+                    <a key={link.title} href={link.path} className={styles.header__link}>
+                      {link.title}
+                    </a>
+                  ),
+                )}
             </ul>
           </nav>
 
           <div className={styles['header__icons-container']}>
+            <NavLink
+              to="/account"
+              className={({ isActive }) =>
+                cn(styles['header__icon'], {
+                  [styles['header__icon--active']]: isActive,
+                })
+              }
+            >
+              <Icon name="account" />
+            </NavLink>
+
             <NavLink
               to="/cart"
               className={({ isActive }) =>

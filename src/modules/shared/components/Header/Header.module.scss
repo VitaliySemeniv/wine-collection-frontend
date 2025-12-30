@@ -10,7 +10,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding-block: 20px;
+    padding-block: 15px;
 
     background-color: $header-bg-color;
     box-shadow: 0 1px 0 0 $gray-elements-color;
@@ -84,7 +84,7 @@
     width: 64px;
 
     @include on-desktop {
-      height: 100px;
+      height: 80px;
       width: 100px;
     }
 
@@ -105,19 +105,12 @@
   &__icons-container {
     display: flex;
     flex-direction: row;
+    gap: 20px;
 
     padding-right: 16px;
 
     @include on-desktop {
       padding-right: 24px;
-    }
-  }
-
-  &__icons {
-    display: none;
-
-    @include on-tablet {
-      display: flex;
     }
   }
 }
