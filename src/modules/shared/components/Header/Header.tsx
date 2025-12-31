@@ -59,7 +59,7 @@ export const Header: React.FC = () => {
 
           <div className={styles['header__icons-container']}>
             <NavLink
-              to="/account"
+              to="/auth"
               className={({ isActive }) =>
                 cn(styles['header__icon'], {
                   [styles['header__icon--active']]: isActive,
