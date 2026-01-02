@@ -5,6 +5,8 @@ import { ProductsPage } from './modules/ProductsPage';
 import { AuthPage } from './modules/AuthPage';
 import { ProfilePage } from './modules/ProfilePage';
 import { ProtectedRoute } from './ProtectedRoute';
+import { ForgotPassword } from './modules/AuthPage/ForgotPassword';
+import { AuthLayout } from './modules/AuthPage/AuthLayout/AuthLayout';
 
 export const AppRoutes = () => (
   <Routes>
@@ -16,6 +18,16 @@ export const AppRoutes = () => (
       </Route>
 
       <Route path="auth" element={<AuthPage />} />
+
+      <Route
+        path="/forgot-password"
+        element={
+          <AuthLayout>
+            <ForgotPassword />
+          </AuthLayout>
+        }
+      />
+
       <Route
         path="account"
         element={
