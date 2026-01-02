@@ -25,16 +25,16 @@
     gap: 8px;
     padding: 32px;
 
-    border: 1px solid var(--gray-elements-color);
+    border: 1px solid $gray-elements-color;
     border-radius: 8px;
     box-sizing: border-box;
-    background-color: var(--product-card-bg-color);
+    background-color: $page-bg-color;
     transition: all 0.4s ease;
 
     cursor: pointer;
 
     &:hover {
-      box-shadow: 0 2px 16px 0 var(--product-card-shadow);
+      box-shadow: 0 2px 16px 0 $product-card-shadow;
 
       .productCard__image {
         transform: scale(1.1);
@@ -53,8 +53,9 @@
     padding-top: 16px;
 
     @extend %body-text-14;
+    font-weight: 600;
 
-    color: var(--gray-primary-color);
+    color: $accent-color;
     text-decoration: none;
   }
 
@@ -72,14 +73,14 @@
     line-height: 100%;
     text-decoration: line-through;
 
-    color: var(--gray-secondary-color);
+    color: $gray-secondary-color;
   }
 
   &__line {
     display: block;
     width: 100%;
     height: 1px;
-    background-color: var(--gray-elements-color);
+    background-color: $gray-elements-color;
   }
 
   &__properties {
@@ -101,7 +102,7 @@
     @extend %small-text-12;
 
     font-weight: 700;
-    color: var(--gray-secondary-color);
+    color: $gray-secondary-color;
   }
 
   &__value {
@@ -109,13 +110,37 @@
 
     font-weight: 700;
     text-align: right;
-    color: var(--gray-primary-color);
+    color: $accent-color;
   }
 
-  &__buttons {
+  &__button {
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     align-items: center;
-    gap: 8px;
+    padding: 10px;
+    width: 100%;
+    height: 40px;
+
+    @extend %button;
+    font-size: 12px;
+    color: $page-bg-color;
+    background-color: $accent-color;
+    border: 1px solid $accent-color;
+    border-radius: 20px;
+    cursor: pointer;
+
+    margin-inline: auto;
+
+    @include on-desktop {
+      margin-inline: 0;
+    }
+
+    transition: all 0.4s;
+    &:hover {
+      box-sizing: border-box;
+      background-color: $page-bg-color;
+      color: $accent-color;
+      border: 1px solid $accent-color;
+    }
   }
 }
