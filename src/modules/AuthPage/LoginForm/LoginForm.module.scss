@@ -34,6 +34,12 @@
       outline: none;
       border-color: $main-color;
     }
+
+    &:-webkit-autofill {
+      box-shadow: 0 0 0px 1000px $page-bg-color inset;
+      -webkit-text-fill-color: $main-color;
+      transition: background-color 5000s ease-in-out 0s;
+    }
   }
 
   &__input-error {

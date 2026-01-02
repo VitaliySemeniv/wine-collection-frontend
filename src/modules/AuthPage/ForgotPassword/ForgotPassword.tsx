@@ -49,6 +49,8 @@ export const ForgotPassword: React.FC = () => {
             <input
               className={`${styles.form__input} ${errors.email ? styles['form__input-error'] : ''}`}
               type="email"
+              name="email"
+              autoComplete="email"
               placeholder="Ел. пошта"
               value={email}
               onChange={(e) => {

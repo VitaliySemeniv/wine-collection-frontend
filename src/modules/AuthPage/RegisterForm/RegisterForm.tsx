@@ -70,6 +70,8 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
         <input
           className={`${styles.form__input} ${errors.name ? styles['form__input-error'] : ''}`}
           type="text"
+          name="name"
+          autoComplete="name"
           placeholder="Імʼя"
           value={name}
           onChange={(e) => {
@@ -84,6 +86,8 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
         <input
           className={`${styles.form__input} ${errors.email ? styles['form__input-error'] : ''}`}
           type="email"
+          name="email"
+          autoComplete="email"
           placeholder="Ел. пошта"
           value={email}
           onChange={(e) => {
@@ -101,6 +105,8 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
               errors.password ? styles['form__input-error'] : ''
             }`}
             type={showPassword ? 'text' : 'password'}
+            name="password"
+            autoComplete="new-password"
             placeholder="Пароль"
             value={password}
             onChange={(e) => {
@@ -128,6 +134,8 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
               errors.confirmPassword ? styles['form__input-error'] : ''
             }`}
             type={showPassword ? 'text' : 'password'}
+            name="confirmPassword"
+            autoComplete="new-password"
             placeholder="Повторіть пароль"
             value={confirmPassword}
             onChange={(e) => {
