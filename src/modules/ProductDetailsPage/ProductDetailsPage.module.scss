@@ -1,0 +1,260 @@
+@import '../shared/utils/main.scss';
+
+.product-details {
+  &__wrapper {
+    margin-bottom: 56px;
+
+    @include content-padding-inline;
+
+    @include on-tablet {
+      margin-bottom: 64px;
+    }
+
+    @include on-desktop {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+
+    @include on-tablet {
+      gap: 64px;
+    }
+
+    @include on-desktop {
+      gap: 80px;
+    }
+  }
+
+  &__main-info {
+    @include page-grid;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+
+    grid-column: 1 / -1;
+
+    @include on-tablet {
+      grid-column: 7 / -1;
+    }
+
+    @include on-desktop {
+      gap: 40px;
+      grid-column: 13 / -1;
+    }
+  }
+
+  &__title {
+    @extend %h2;
+  }
+
+  &__description {
+    @extend %body-text-14;
+
+    font-size: 16px;
+    text-align: justify;
+  }
+
+  &__main-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 288px;
+    height: 288px;
+
+    @include on-tablet {
+      width: 287px;
+      height: 287px;
+      grid-column: 1 / 7;
+    }
+
+    @include on-desktop {
+      width: 464px;
+      height: 464px;
+      grid-column: 1 / 13;
+    }
+  }
+
+  &__image {
+    display: block;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+    padding: 7px;
+
+    @include on-desktop {
+      padding: 11px;
+    }
+  }
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 200px;
+    height: 40px;
+
+    @extend %button;
+    color: $page-bg-color;
+    background-color: $accent-color;
+    border: 1px solid $accent-color;
+    border-radius: 20px;
+    cursor: pointer;
+
+    margin-inline: auto;
+
+    @include on-desktop {
+      margin-inline: 0;
+    }
+
+    transition: all 0.4s;
+    &:hover {
+      box-sizing: border-box;
+      background-color: $page-bg-color;
+      color: $accent-color;
+      border: 1px solid $accent-color;
+    }
+  }
+
+  &__purchase {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__price {
+    @extend %price;
+    font-size: 26px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    @include on-tablet {
+      gap: 24px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    color: $page-bg-color;
+    background-color: $main-color;
+    border: 1px solid $main-color;
+    border-radius: 16px;
+  }
+
+  &__icon-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 32px;
+    height: 32px;
+
+    background-color: $page-bg-color;
+    border: 1px solid $gray-icons-color;
+    border-radius: 48px;
+    transition:
+      border-color 0.4s ease,
+      box-shadow 0.3s ease;
+
+    @extend %button;
+
+    cursor: pointer;
+
+    @include hover(border-color, $gray-primary-color);
+
+    &.rotated {
+      transform: rotate(90deg);
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      border-color: $gray-elements-color;
+      cursor: not-allowed;
+    }
+  }
+
+  &__count {
+    width: 32px;
+    height: 32px;
+
+    @extend %body-text-14;
+
+    line-height: 32px;
+    text-align: center;
+  }
+
+  &__characteristics-title {
+    margin-bottom: 32px;
+
+    @extend %h3;
+  }
+
+  &__characteristics-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__characteristics-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__characteristics-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid $gray-elements-color;
+
+    span:first-child {
+      color: $gray-secondary-color;
+
+      @extend %body-text-14;
+
+      font-size: 16px;
+    }
+
+    span:last-child {
+      color: $main-color;
+      font-weight: 600;
+
+      @extend %body-text-14;
+
+      font-size: 16px;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

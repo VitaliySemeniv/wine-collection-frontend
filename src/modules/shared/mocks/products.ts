@@ -7,7 +7,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Італійське червоне сухе вино з інтенсивним ароматом черешні й спецій, бархатистими танінами та фруктово-пряними нотами у смаку.',
-    image: './mock-images/prestige-chianti-docg.png',
+    image: '/mock-images/prestige-chianti-docg.png',
     price: 595,
     category: 'celebration',
     type: 'red',
@@ -21,7 +21,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Французьке біле сухе вино з аромами фруктів та свіжістю, добре збалансоване між кислотністю та фруктовим профілем.',
-    image: './mock-images/tel-quel-sauvignon-blanc.png',
+    image: '/mock-images/tel-quel-sauvignon-blanc.png',
     price: 345,
     category: 'dinner',
     type: 'white',
@@ -35,7 +35,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Французький Pineau Rouge — зміцнене ароматне вино з багатим фруктовим смаком, м’якою солодкістю й легкою ноткою дуба.',
-    image: './mock-images/pineau-des-charentes-rouge.png',
+    image: '/mock-images/pineau-des-charentes-rouge.png',
     price: 1175,
     category: 'gift',
     type: 'dessert',
@@ -49,7 +49,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Італійське червоне сухе вино з інтенсивним ароматом черешні й спецій, бархатистими танінами та фруктово-пряними нотами у смаку.',
-    image: './mock-images/prestige-chianti-docg.png',
+    image: '/mock-images/prestige-chianti-docg.png',
     price: 595,
     category: 'celebration',
     type: 'red',
@@ -63,7 +63,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Французьке біле сухе вино з аромами фруктів та свіжістю, добре збалансоване між кислотністю та фруктовим профілем.',
-    image: './mock-images/tel-quel-sauvignon-blanc.png',
+    image: '/mock-images/tel-quel-sauvignon-blanc.png',
     price: 345,
     category: 'dinner',
     type: 'white',
@@ -77,7 +77,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Французький Pineau Rouge — зміцнене ароматне вино з багатим фруктовим смаком, м’якою солодкістю й легкою ноткою дуба.',
-    image: './mock-images/pineau-des-charentes-rouge.png',
+    image: '/mock-images/pineau-des-charentes-rouge.png',
     price: 1175,
     category: 'gift',
     type: 'dessert',
@@ -91,7 +91,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Італійське червоне сухе вино з інтенсивним ароматом черешні й спецій, бархатистими танінами та фруктово-пряними нотами у смаку.',
-    image: './mock-images/prestige-chianti-docg.png',
+    image: '/mock-images/prestige-chianti-docg.png',
     price: 595,
     category: 'celebration',
     type: 'red',
@@ -105,7 +105,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Французьке біле сухе вино з аромами фруктів та свіжістю, добре збалансоване між кислотністю та фруктовим профілем.',
-    image: './mock-images/tel-quel-sauvignon-blanc.png',
+    image: '/mock-images/tel-quel-sauvignon-blanc.png',
     price: 345,
     category: 'dinner',
     type: 'white',
@@ -119,7 +119,7 @@ export const mockProducts: Product[] = [
     volume: 750,
     description:
       'Французький Pineau Rouge — зміцнене ароматне вино з багатим фруктовим смаком, м’якою солодкістю й легкою ноткою дуба.',
-    image: './mock-images/pineau-des-charentes-rouge.png',
+    image: '/mock-images/pineau-des-charentes-rouge.png',
     price: 1175,
     category: 'gift',
     type: 'dessert',

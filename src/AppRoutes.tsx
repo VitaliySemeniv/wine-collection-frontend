@@ -7,6 +7,7 @@ import { ProfilePage } from './modules/ProfilePage';
 import { ProtectedRoute } from './ProtectedRoute';
 import { ForgotPassword } from './modules/AuthPage/ForgotPassword';
 import { AuthLayout } from './modules/AuthPage/AuthLayout/AuthLayout';
+import { ProductDetailsPage } from './modules/ProductDetailsPage';
 
 export const AppRoutes = () => (
   <Routes>
@@ -15,6 +16,7 @@ export const AppRoutes = () => (
 
       <Route path="wines">
         <Route index element={<ProductsPage />} />
+        <Route path=":itemId" element={<ProductDetailsPage />} />
       </Route>
 
       <Route path="auth" element={<AuthPage />} />

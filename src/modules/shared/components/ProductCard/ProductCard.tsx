@@ -13,11 +13,11 @@ export const ProductCard: FC<Props> = ({ product }) => {
   return (
     <article className={styles['product-card']}>
       <div className={styles['product-card__container']}>
-        <Link to={`/${product.category}/${product.id}`} className={styles['product-card__link']}>
+        <Link to={`/wines/${product.id}`} className={styles['product-card__link']}>
           <img className={styles['product-card__image']} src={product.image} alt={product.name} />
         </Link>
 
-        <Link className={styles['product-card__title']} to={`/${product.category}/${product.id}`}>
+        <Link className={styles['product-card__title']} to={`/wines/${product.id}`}>
           {product.name}
         </Link>
 
