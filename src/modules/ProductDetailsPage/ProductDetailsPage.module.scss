@@ -125,6 +125,13 @@
       color: $accent-color;
       border: 1px solid $accent-color;
     }
+
+    &:disabled {
+      background-color: $gray-elements-color;
+      border-color: $gray-elements-color;
+      color: $gray-secondary-color;
+      cursor: not-allowed;
+    }
   }
 
   &__purchase {

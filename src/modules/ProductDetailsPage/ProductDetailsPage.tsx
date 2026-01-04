@@ -35,6 +35,8 @@ export const ProductDetailsPage = () => {
     return <p>Товар не знайдено</p>;
   }
 
+  const isAvailable = product.inStock;
+
   return (
     <section className={styles['product-details']}>
       <div className={styles['product-details__wrapper']}>
@@ -84,7 +86,9 @@ export const ProductDetailsPage = () => {
                     </div>
                   </div>
 
-                  <button className={styles['product-details__button']}>Додати до кошика</button>
+                  <button className={styles['product-details__button']} disabled={!isAvailable}>
+                    {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
+                  </button>
                 </div>
               </div>
 

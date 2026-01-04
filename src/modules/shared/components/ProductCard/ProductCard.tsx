@@ -10,8 +10,10 @@ type Props = {
 };
 
 export const ProductCard: FC<Props> = ({ product }) => {
+  const isAvailable = product.inStock;
+
   return (
-    <article className={styles['product-card']}>
+    <article className={styles['product-card']} data-out-of-stock={!isAvailable}>
       <div className={styles['product-card__container']}>
         <Link to={`/wines/${product.id}`} className={styles['product-card__link']}>
           <img className={styles['product-card__image']} src={product.image} alt={product.name} />
@@ -41,7 +43,9 @@ export const ProductCard: FC<Props> = ({ product }) => {
           </div>
         </div>
 
-        <button className={styles['product-card__button']}>Додати до кошика</button>
+        <button className={styles['product-card__button']} disabled={!isAvailable}>
+          {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
+        </button>
       </div>
     </article>
   );
