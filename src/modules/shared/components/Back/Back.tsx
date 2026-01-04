@@ -10,7 +10,7 @@ export const Back = () => {
       <div className={styles['back-button__wrapper']}>
         <Icon name="arrow_left" />
 
-        <div className={styles['back-button__text']}>Back</div>
+        <div className={styles['back-button__text']}>Назад</div>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ export const Footer = () => {
           <div className={styles.footer__about}>
             <div className={styles['footer__about-wrapper']}>
               <Link to="/" className={styles['footer__logo-wrapper']}>
-                <img src="./logo.svg" alt="Logo" className={styles.footer__logo} />
+                <img src="/logo.svg" alt="Logo" className={styles.footer__logo} />
               </Link>
 
               <p className={styles['footer__about-text']}>

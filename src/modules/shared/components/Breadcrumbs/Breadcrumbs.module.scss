@@ -14,14 +14,14 @@
   &__text {
     @extend %small-text-12;
 
-    color: var(--gray-secondary-color);
+    color: $gray-secondary-color;
 
     text-decoration: none;
     align-content: center;
 
     &--active {
       font-weight: 700;
-      color: var(--gray-primary-color);
+      color: $accent-color;
     }
 
     &--truncate {

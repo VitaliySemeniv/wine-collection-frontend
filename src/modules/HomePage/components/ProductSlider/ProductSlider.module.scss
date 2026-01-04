@@ -1,35 +1,12 @@
 @import '../../../shared/utils/main';
 
 .slider {
-  &__wrapper {
-    padding-left: 16px;
-
-    @include on-tablet {
-      padding-left: 24px;
-    }
-
-    @include on-desktop {
-      @include content-padding-inline;
-
-      padding-left: 32px;
-    }
-  }
-
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 72px;
     margin-bottom: 24px;
-    padding-right: 16px;
-
-    @include on-tablet {
-      padding-right: 24px;
-    }
-
-    @include on-desktop {
-      padding-right: 0;
-    }
   }
 
   &__title {
@@ -40,10 +17,24 @@
     display: flex;
     gap: 16px;
 
-    padding-block: 15px;
-
     @include on-tablet {
       padding-block: 4.5px;
     }
+  }
+}
+
+:global(.swiper-slide) {
+  width: 212px !important;
+  max-width: 212px;
+  box-sizing: border-box;
+
+  @include on-tablet {
+    width: 237px !important;
+    max-width: 237px;
+  }
+
+  @include on-desktop {
+    width: 272px !important;
+    max-width: 272px;
   }
 }

@@ -24,7 +24,7 @@ export const Breadcrumbs = ({ firstPath, secondPath }: Props) => {
             [styles['breadcrumbs__text--active']]: secondPath,
           })}
         >
-          {firstPath}
+          Вина
         </Link>
 
         {secondPath ? (

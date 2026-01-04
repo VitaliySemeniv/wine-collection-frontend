@@ -1,5 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
+import { useState } from 'react';
 import type { FC } from 'react';
 import type { Product } from '../../../../types/Product';
 
@@ -18,45 +19,52 @@ type Props = {
 };
 
 export const ProductSlider: FC<Props> = ({ products, header, displayType = 'discount' }) => {
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
+
   return (
     <section className={styles.slider}>
-      <div className={styles.slider__wrapper}>
-        <div className={styles.slider__header}>
-          <h2 className={styles.slider__title}>{header}</h2>
+      <div className={styles.slider__header}>
+        <h2 className={styles.slider__title}>{header}</h2>
 
-          <div className={styles.slider__buttons}>
-            <IconButton icon="arrow_left" className="swiper-prev" />
-            <IconButton icon="arrow_right" className="swiper-next" />
-          </div>
+        <div className={styles.slider__buttons}>
+          <IconButton
+            icon={isBeginning ? 'arrow_left_disabled' : 'arrow_left'}
+            className="swiper-prev"
+            disabled={isBeginning}
+          />
+
+          <IconButton
+            icon={isEnd ? 'arrow_right_disabled' : 'arrow_right'}
+            className="swiper-next"
+            disabled={isEnd}
+          />
         </div>
-
-        <Swiper
-          modules={[Navigation]}
-          spaceBetween={16}
-          slidesPerView="auto"
-          navigation={{
-            prevEl: '.swiper-prev',
-            nextEl: '.swiper-next',
-          }}
-          breakpoints={{
-            0: {
-              slidesPerView: 1.5,
-            },
-            640: {
-              slidesPerView: 2.5,
-            },
-            1200: {
-              slidesPerView: 4,
-            },
-          }}
-        >
-          {products.map((product) => (
-            <SwiperSlide key={product.id} style={{ width: 'auto' }}>
-              <ProductCard product={product} displayType={displayType} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
       </div>
+
+      <Swiper
+        modules={[Navigation]}
+        slidesPerView="auto"
+        spaceBetween={16}
+        navigation={{
+          prevEl: '.swiper-prev',
+          nextEl: '.swiper-next',
+        }}
+        onSwiper={(swiper) => {
+          setIsBeginning(swiper.isBeginning);
+          setIsEnd(swiper.isEnd);
+        }}
+        onSlideChange={(swiper) => {
+          setIsBeginning(swiper.isBeginning);
+          setIsEnd(swiper.isEnd);
+        }}
+      >
+        {products.map((product) => (
+          <SwiperSlide key={product.id}>
+            <ProductCard product={product} displayType={displayType} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </section>
   );
 };

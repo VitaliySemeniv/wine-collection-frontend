@@ -18,7 +18,7 @@
   &__main {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     gap: 56px;
 
     @include on-tablet {
@@ -38,7 +38,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 32px;
+    gap: 20px;
 
     grid-column: 1 / -1;
 
@@ -47,13 +47,14 @@
     }
 
     @include on-desktop {
-      gap: 40px;
       grid-column: 13 / -1;
     }
   }
 
   &__title {
     @extend %h2;
+
+    text-align: justify;
   }
 
   &__description {
@@ -64,17 +65,19 @@
   }
 
   &__main-image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    margin-inline: auto;
 
     width: 288px;
     height: 288px;
 
+    grid-column: 1 / -1;
+    margin-bottom: 40px;
+
     @include on-tablet {
-      width: 287px;
-      height: 287px;
+      width: 380px;
+      height: 380px;
       grid-column: 1 / 7;
+      margin-bottom: 0;
     }
 
     @include on-desktop {
@@ -101,7 +104,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    width: 200px;
+    width: 160px;
     height: 40px;
 
     @extend %button;
@@ -111,10 +114,8 @@
     border-radius: 20px;
     cursor: pointer;
 
-    margin-inline: auto;
-
     @include on-desktop {
-      margin-inline: 0;
+      width: 200px;
     }
 
     transition: all 0.4s;
@@ -128,8 +129,13 @@
 
   &__purchase {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+
+    @include on-desktop {
+      flex-direction: row;
+      justify-content: space-between
+    }
   }
 
   &__price {
@@ -139,8 +145,12 @@
 
   &__actions {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 20px;
+
+    @include on-tablet {
+      gap: 20px;
+    }
   }
 
   &__controls {
@@ -209,18 +219,18 @@
   }
 
   &__characteristics-title {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 
     @extend %h3;
   }
 
   &__characteristics-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include page-grid;
   }
 
   &__characteristics-list {
+    grid-column: 1 / -1;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -230,30 +240,26 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 40px;
+    gap: 100px;
 
-    padding-bottom: 12px;
-    margin-bottom: 12px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
     border-bottom: 1px solid $gray-elements-color;
+
+    @extend %body-text-14;
 
     span:first-child {
       color: $gray-secondary-color;
-
-      @extend %body-text-14;
-
-      font-size: 16px;
     }
 
     span:last-child {
       color: $main-color;
       font-weight: 600;
-
-      @extend %body-text-14;
-
-      font-size: 16px;
     }
 
     &:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
       border-bottom: none;
     }
   }

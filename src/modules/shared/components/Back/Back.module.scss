@@ -20,8 +20,8 @@
     @extend %small-text-12;
 
     font-weight: 700;
-    color: var(--back-text-color);
+    color: $gray-secondary-color;
 
-    @include hover(color, var(--gray-primary-color));
+    @include hover(color, $gray-primary-color);
   }
 }

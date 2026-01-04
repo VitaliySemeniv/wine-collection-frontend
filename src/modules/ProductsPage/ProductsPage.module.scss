@@ -16,7 +16,7 @@
 
     @extend %h1;
 
-    color: var(--gray-primary-color);
+    color: $main-color;
   }
 
   &__container {

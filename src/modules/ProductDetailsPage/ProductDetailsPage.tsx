@@ -38,7 +38,7 @@ export const ProductDetailsPage = () => {
   return (
     <section className={styles['product-details']}>
       <div className={styles['product-details__wrapper']}>
-        <Breadcrumbs firstPath="Phones" secondPath={product.name} />
+        <Breadcrumbs firstPath="wines" secondPath={product.name} />
 
         <Back />
 
@@ -110,9 +110,7 @@ export const ProductDetailsPage = () => {
 
                       <span>{product.volume} мл</span>
                     </li>
-                  </ul>
 
-                  <ul className={styles['product-details__characteristics-list']}>
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Настрій</span>
 
