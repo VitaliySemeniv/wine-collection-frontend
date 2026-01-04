@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { mockProducts } from '../shared/mocks/products';
 
 import styles from './ProductDetailsPage.module.scss';
@@ -13,8 +13,10 @@ import { ProductSlider } from '../HomePage/components/ProductSlider';
 export const ProductDetailsPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [suggested, setSuggested] = useState<Product[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const { itemId } = useParams<{ itemId: string }>();
+  const location = useLocation();
 
   const product = mockProducts.find((p) => p.id === Number(itemId));
 
@@ -25,11 +27,18 @@ export const ProductDetailsPage = () => {
   useEffect(() => {
     if (!product) return;
 
+    const imageIndex = location.state?.imageIndex ?? 0;
+
+    if (product.images[imageIndex]) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedImage(product.images[imageIndex]);
+    } else {
+      setSelectedImage(product.images[0]);
+    }
     const sameCategory = mockProducts.filter((p) => p.id !== product.id);
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSuggested([...sameCategory].sort(() => Math.random() - 0.5).slice(0, 6));
-  }, [product]);
+  }, [product, location.state]);
 
   if (!product) {
     return <p>Товар не знайдено</p>;
@@ -46,12 +55,36 @@ export const ProductDetailsPage = () => {
 
         <div className={styles['product-details__main']}>
           <div className={styles['product-details__main-info']}>
-            <div className={styles['product-details__main-image-container']}>
-              <img
-                src={product.image}
-                alt={product.name}
-                className={styles['product-details__image']}
-              />
+            <div className={styles['product-details__images-container']}>
+              <div className={styles['product-details__images-column']}>
+                {product.images.map((image, i) => (
+                  <div
+                    key={i}
+                    className={`${styles['product-details__image-container']} ${
+                      selectedImage === image
+                        ? styles['product-details__image-container--active']
+                        : ''
+                    }`}
+                    onClick={() => setSelectedImage(image)}
+                  >
+                    <img
+                      className={styles['product-details__image']}
+                      src={image}
+                      alt={`${product.name} – image ${i + 1}`}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {selectedImage && (
+                <div className={styles['product-details__main-image-container']}>
+                  <img
+                    className={styles['product-details__main-image']}
+                    src={selectedImage}
+                    alt={product.name}
+                  />
+                </div>
+              )}
             </div>
 
             <div className={styles['product-details__content']}>
