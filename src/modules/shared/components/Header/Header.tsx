@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
       >
         <div className={styles['header__top-bar']}>
           <Link to="/" className={styles['header__logo-container']}>
-            <img src={'./logo.svg'} alt={'Logo'} className={styles.header__logo} />
+            <img src={'/logo.svg'} alt={'Logo'} className={styles.header__logo} />
           </Link>
 
           <nav className={styles.header__nav}>

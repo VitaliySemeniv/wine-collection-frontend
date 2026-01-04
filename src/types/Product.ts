@@ -8,6 +8,7 @@ export type Product = {
   volume: number;
   description: string;
   image: string;
+  images: string[];
   price: number;
   category: Category;
   type: WineType;

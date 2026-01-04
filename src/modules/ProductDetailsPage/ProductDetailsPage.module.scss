@@ -1,0 +1,336 @@
+@import '../shared/utils/main.scss';
+
+.product-details {
+  &__wrapper {
+    margin-bottom: 56px;
+
+    @include content-padding-inline;
+
+    @include on-tablet {
+      margin-bottom: 64px;
+    }
+
+    @include on-desktop {
+      margin-bottom: 80px;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 56px;
+
+    @include on-tablet {
+      gap: 64px;
+    }
+
+    @include on-desktop {
+      gap: 80px;
+    }
+  }
+
+  &__main-info {
+    @include page-grid;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+
+    grid-column: 1 / -1;
+
+    @include on-tablet {
+      grid-column: 7 / -1;
+    }
+
+    @include on-desktop {
+      grid-column: 13 / -1;
+    }
+  }
+
+  &__title {
+    @extend %h2;
+
+    text-align: justify;
+  }
+
+  &__description {
+    @extend %body-text-14;
+
+    font-size: 16px;
+    text-align: justify;
+  }
+
+  &__images-container {
+    grid-column: 1 / -1;
+
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 40px;
+
+    @include on-tablet {
+      grid-column: 1 / 7;
+      flex-direction: row;
+      margin-bottom: 0;
+    }
+
+    @include on-desktop {
+      grid-column: 1 / 13;
+      align-items: start;
+    }
+  }
+
+  &__images-column {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    @include on-tablet {
+      flex-direction: column;
+    }
+
+    @include on-desktop {
+      gap: 16px;
+    }
+  }
+
+  &__image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 51px;
+    height: 49px;
+    border: 1px solid $gray-elements-color;
+
+    cursor: pointer;
+
+    &--active {
+      border-color: $main-color;
+    }
+
+    @include hover(border-color, $gray-primary-color);
+
+    @include on-tablet {
+      width: 35px;
+      height: 35px;
+    }
+
+    @include on-desktop {
+      width: 80px;
+      height: 80px;
+    }
+  }
+
+  &__image {
+    display: block;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+
+    padding: 4px;
+  }
+
+  &__main-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 288px;
+    height: 288px;
+
+    @include on-tablet {
+      width: 287px;
+      height: 287px;
+    }
+
+    @include on-desktop {
+      width: 464px;
+      height: 464px;
+    }
+  }
+
+  &__main-image {
+    display: block;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    width: 160px;
+    height: 40px;
+
+    @extend %button;
+    color: $page-bg-color;
+    background-color: $accent-color;
+    border: 1px solid $accent-color;
+    border-radius: 20px;
+    cursor: pointer;
+
+    @include on-desktop {
+      width: 200px;
+    }
+
+    transition: all 0.4s;
+    &:hover {
+      box-sizing: border-box;
+      background-color: $page-bg-color;
+      color: $accent-color;
+      border: 1px solid $accent-color;
+    }
+
+    &:disabled {
+      background-color: $gray-elements-color;
+      border-color: $gray-elements-color;
+      color: $gray-secondary-color;
+      cursor: not-allowed;
+    }
+  }
+
+  &__purchase {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    @include on-desktop {
+      flex-direction: row;
+      justify-content: space-between
+    }
+  }
+
+  &__price {
+    @extend %price;
+    font-size: 26px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include on-tablet {
+      gap: 20px;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    @include on-tablet {
+      gap: 24px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    color: $page-bg-color;
+    background-color: $main-color;
+    border: 1px solid $main-color;
+    border-radius: 16px;
+  }
+
+  &__icon-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 32px;
+    height: 32px;
+
+    background-color: $page-bg-color;
+    border: 1px solid $gray-icons-color;
+    border-radius: 48px;
+    transition:
+      border-color 0.4s ease,
+      box-shadow 0.3s ease;
+
+    @extend %button;
+
+    cursor: pointer;
+
+    @include hover(border-color, $gray-primary-color);
+
+    &.rotated {
+      transform: rotate(90deg);
+    }
+
+    &.disabled {
+      opacity: 0.5;
+      border-color: $gray-elements-color;
+      cursor: not-allowed;
+    }
+  }
+
+  &__count {
+    width: 32px;
+    height: 32px;
+
+    @extend %body-text-14;
+
+    line-height: 32px;
+    text-align: center;
+  }
+
+  &__characteristics-title {
+    margin-bottom: 24px;
+
+    @extend %h3;
+  }
+
+  &__characteristics-wrapper {
+    @include page-grid;
+  }
+
+  &__characteristics-list {
+    grid-column: 1 / -1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &__characteristics-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 100px;
+
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid $gray-elements-color;
+
+    @extend %body-text-14;
+
+    span:first-child {
+      color: $gray-secondary-color;
+    }
+
+    span:last-child {
+      color: $main-color;
+      font-weight: 600;
+    }
+
+    &:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+  }
+}

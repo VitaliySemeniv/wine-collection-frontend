@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { useProducts } from '../shared/hooks/useProducts';
+import { mockProducts } from '../shared/mocks/products';
+
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
 import { ProductsList } from '../shared/components/ProductList';
 import { DropDown } from '../shared/components/DropDown/DropDown';
@@ -26,7 +27,10 @@ export const ProductsPage = () => {
   const [searchValue, setSearchValue] = useState(params.query ?? '');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  const { products, total, loading } = useProducts(params);
+  // const { products, total, loading } = useProducts(params);
+  const products = mockProducts;
+  const total = mockProducts.length;
+  const loading = false;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));

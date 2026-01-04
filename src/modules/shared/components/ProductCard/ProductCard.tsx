@@ -10,20 +10,16 @@ type Props = {
 };
 
 export const ProductCard: FC<Props> = ({ product }) => {
+  const isAvailable = product.inStock;
+
   return (
-    <article className={styles['product-card']}>
+    <article className={styles['product-card']} data-out-of-stock={!isAvailable}>
       <div className={styles['product-card__container']}>
-        <Link
-          to={`/${product.category}/${product.itemId}`}
-          className={styles['product-card__link']}
-        >
+        <Link to={`/wines/${product.id}`} className={styles['product-card__link']}>
           <img className={styles['product-card__image']} src={product.image} alt={product.name} />
         </Link>
 
-        <Link
-          className={styles['product-card__title']}
-          to={`/${product.category}/${product.itemId}`}
-        >
+        <Link className={styles['product-card__title']} to={`/wines/${product.id}`}>
           {product.name}
         </Link>
 
@@ -33,7 +29,23 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
         <div className={styles['product-card__line']}></div>
 
-        <div className={styles['product-card__properties']}></div>
+        <div className={styles['product-card__properties']}>
+          <div className={styles['product-card__property']}>
+            <span className={styles['product-card__label']}>Країна</span>
+
+            <span className={styles['product-card__value']}>{product.country}</span>
+          </div>
+
+          <div className={styles['product-card__property']}>
+            <span className={styles['product-card__label']}>Об'єм</span>
+
+            <span className={styles['product-card__value']}>{product.volume} мл</span>
+          </div>
+        </div>
+
+        <button className={styles['product-card__button']} disabled={!isAvailable}>
+          {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
+        </button>
       </div>
     </article>
   );
