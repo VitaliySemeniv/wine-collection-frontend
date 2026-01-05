@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import type { Product } from '../../../../types/Product';
 import styles from './ProductCard.module.scss';
+import { useCart } from '../../context/CartContext';
 
 type Props = {
   product: Product;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export const ProductCard: FC<Props> = ({ product }) => {
+  const { addToCart } = useCart();
   const isAvailable = product.inStock;
 
   return (
@@ -43,7 +45,11 @@ export const ProductCard: FC<Props> = ({ product }) => {
           </div>
         </div>
 
-        <button className={styles['product-card__button']} disabled={!isAvailable}>
+        <button
+          className={styles['product-card__button']}
+          disabled={!isAvailable}
+          onClick={() => addToCart(product.id, 1)}
+        >
           {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
         </button>
       </div>

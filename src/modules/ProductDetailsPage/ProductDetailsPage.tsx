@@ -9,12 +9,13 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import type { Product } from '../../types/Product';
 import { ProductSlider } from '../HomePage/components/ProductSlider';
+import { useCart } from '../shared/context/CartContext';
 
 export const ProductDetailsPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [suggested, setSuggested] = useState<Product[]>([]);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
+  const { addToCart } = useCart();
   const { itemId } = useParams<{ itemId: string }>();
   const location = useLocation();
 
@@ -119,7 +120,11 @@ export const ProductDetailsPage = () => {
                     </div>
                   </div>
 
-                  <button className={styles['product-details__button']} disabled={!isAvailable}>
+                  <button
+                    className={styles['product-details__button']}
+                    disabled={!isAvailable}
+                    onClick={() => addToCart(product.id, quantity)}
+                  >
                     {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
                   </button>
                 </div>

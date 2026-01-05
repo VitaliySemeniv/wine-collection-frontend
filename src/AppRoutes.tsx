@@ -8,6 +8,7 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { ForgotPassword } from './modules/AuthPage/ForgotPassword';
 import { AuthLayout } from './modules/AuthPage/AuthLayout/AuthLayout';
 import { ProductDetailsPage } from './modules/ProductDetailsPage';
+import { CartPage } from './modules/CartPage';
 
 export const AppRoutes = () => (
   <Routes>
@@ -38,6 +39,8 @@ export const AppRoutes = () => (
           </ProtectedRoute>
         }
       />
+
+      <Route path="cart" element={<CartPage />} />
     </Route>
   </Routes>
 );
