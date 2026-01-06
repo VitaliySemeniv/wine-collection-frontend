@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { mockProducts } from '../shared/mocks/products';
-
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
 import { ProductsList } from '../shared/components/ProductList';
 import { DropDown } from '../shared/components/DropDown/DropDown';
 import { Loader } from '../shared/components/Loader';
 import { Filters } from '../shared/components/Filters';
+import type { ProductsParams } from '../shared/api/products';
 
 import styles from './ProductsPage.module.scss';
 import { Chip, IconButton, InputAdornment, TextField } from '@mui/material';
@@ -17,6 +16,24 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 
 import debounce from 'lodash.debounce';
+import { useProducts } from '../shared/hooks/useProducts';
+
+const buildProductsParams = (searchParams: URLSearchParams): ProductsParams => {
+  return {
+    query: searchParams.get('query') || undefined,
+    sort: searchParams.get('sort') || 'age',
+    page: Number(searchParams.get('page') || 1),
+    perPage: Number(searchParams.get('perPage') || 8),
+
+    wine: searchParams.getAll('wine'),
+    country: searchParams.getAll('country'),
+
+    priceMin: searchParams.get('priceMin') || undefined,
+    priceMax: searchParams.get('priceMax') || undefined,
+  };
+};
+
+const USE_MOCKS = true;
 
 export const ProductsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,10 +44,9 @@ export const ProductsPage = () => {
   const [searchValue, setSearchValue] = useState(params.query ?? '');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  // const { products, total, loading } = useProducts(params);
-  const products = mockProducts;
-  const total = mockProducts.length;
-  const loading = false;
+  const productsParams = useMemo(() => buildProductsParams(searchParams), [searchParams]);
+
+  const { products, total, loading } = useProducts(productsParams, USE_MOCKS);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
