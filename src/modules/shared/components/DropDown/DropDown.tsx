@@ -37,6 +37,10 @@ export const DropDown: FC<Props> = ({ label, paramKey, defaultValue, options }) 
       <InputLabel
         sx={{
           fontFamily: '"Playfair Display", "Times New Roman", serif',
+
+          '&.Mui-focused': {
+            color: '#7a1e2d',
+          },
         }}
       >
         {label}
@@ -56,6 +60,10 @@ export const DropDown: FC<Props> = ({ label, paramKey, defaultValue, options }) 
 
           '& .MuiOutlinedInput-notchedOutline': {
             borderRadius: '20px',
+          },
+
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#7a1e2d',
           },
         }}
       >

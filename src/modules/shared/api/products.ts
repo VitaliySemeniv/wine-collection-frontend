@@ -6,6 +6,10 @@ export type ProductsParams = {
   sort?: string;
   page?: number;
   perPage?: number;
+  wine?: string[];
+  country?: string[];
+  priceMin?: string;
+  priceMax?: string;
 };
 
 export const getProducts = (params: ProductsParams) => {

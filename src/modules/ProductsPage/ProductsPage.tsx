@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-import { mockProducts } from '../shared/mocks/products';
-
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
 import { ProductsList } from '../shared/components/ProductList';
 import { DropDown } from '../shared/components/DropDown/DropDown';
 import { Loader } from '../shared/components/Loader';
 import { Filters } from '../shared/components/Filters';
+import type { ProductsParams } from '../shared/api/products';
 
 import styles from './ProductsPage.module.scss';
 import { Chip, IconButton, InputAdornment, TextField } from '@mui/material';
@@ -17,6 +16,24 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 
 import debounce from 'lodash.debounce';
+import { useProducts } from '../shared/hooks/useProducts';
+
+const buildProductsParams = (searchParams: URLSearchParams): ProductsParams => {
+  return {
+    query: searchParams.get('query') || undefined,
+    sort: searchParams.get('sort') || 'age',
+    page: Number(searchParams.get('page') || 1),
+    perPage: Number(searchParams.get('perPage') || 8),
+
+    wine: searchParams.getAll('wine'),
+    country: searchParams.getAll('country'),
+
+    priceMin: searchParams.get('priceMin') || undefined,
+    priceMax: searchParams.get('priceMax') || undefined,
+  };
+};
+
+const USE_MOCKS = true;
 
 export const ProductsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -27,10 +44,9 @@ export const ProductsPage = () => {
   const [searchValue, setSearchValue] = useState(params.query ?? '');
   const [filtersOpen, setFiltersOpen] = useState(false);
 
-  // const { products, total, loading } = useProducts(params);
-  const products = mockProducts;
-  const total = mockProducts.length;
-  const loading = false;
+  const productsParams = useMemo(() => buildProductsParams(searchParams), [searchParams]);
+
+  const { products, total, loading } = useProducts(productsParams, USE_MOCKS);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -78,6 +94,10 @@ export const ProductsPage = () => {
     setSearchParams(params);
   };
 
+  const resetAll = () => {
+    setSearchParams({});
+  };
+
   const filterLabels: Record<string, string> = {
     gift: '🎁 На подарунок',
     dinner: '🍽️ До вечері',
@@ -87,8 +107,17 @@ export const ProductsPage = () => {
     relaxed: '😌 Розслаблений',
   };
 
+  const sortLabels: Record<string, string> = {
+    age: 'Новинки',
+    title: 'Назва',
+    price: 'Від дешевих → дорогих',
+  };
+
   const priceMin = searchParams.get('priceMin');
   const priceMax = searchParams.get('priceMax');
+
+  const hasSelectedFilters =
+    priceMin || priceMax || Object.keys(params).some((key) => key !== 'query' && key !== 'page');
 
   if (loading) {
     return <Loader />;
@@ -236,64 +265,57 @@ export const ProductsPage = () => {
               </div>
             </div>
 
-            <div className={styles['products__selected-filters']}>
-              {priceMin && priceMax && (
-                <Chip
-                  label={`₴ ${priceMin} – ${priceMax}`}
-                  onDelete={() => {
-                    const nextParams = new URLSearchParams(searchParams);
-                    nextParams.delete('priceMin');
-                    nextParams.delete('priceMax');
-                    setSearchParams(nextParams);
-                  }}
-                  variant="outlined"
-                  sx={{
-                    fontFamily: '"Playfair Display", serif',
-                    fontSize: '14px',
-                    border: '1px solid #000',
-                    mr: 1,
-                    mb: 1,
-                  }}
-                />
-              )}
+            {hasSelectedFilters && (
+              <div className={styles['products__selected-filters']}>
+                {priceMin && priceMax && (
+                  <Chip
+                    label={`₴ ${priceMin} – ${priceMax}`}
+                    onDelete={() => {
+                      const nextParams = new URLSearchParams(searchParams);
+                      nextParams.delete('priceMin');
+                      nextParams.delete('priceMax');
+                      setSearchParams(nextParams);
+                    }}
+                    variant="outlined"
+                    sx={{
+                      fontFamily: '"Playfair Display", serif',
+                      fontSize: '14px',
+                      border: '1px solid #000',
+                      mr: 1,
+                      mb: 1,
+                    }}
+                  />
+                )}
 
-              {Object.keys(params).map((key) =>
-                key !== 'query' && key !== 'page' && key !== 'priceMin' && key !== 'priceMax'
-                  ? searchParams.getAll(key).map((value) => (
-                      <Chip
-                        key={`${key}-${value}`}
-                        label={filterLabels[value] ?? value}
-                        onDelete={() => toggleParam(key, value)}
-                        variant="outlined"
-                        sx={{
-                          fontFamily: '"Playfair Display", serif',
-                          fontSize: '14px',
-                          border: '1px solid #000',
-                          mr: 1,
-                          mb: 1,
-                        }}
-                      />
-                    ))
-                  : null,
-              )}
+                {Object.keys(params).map((key) =>
+                  key !== 'query' && key !== 'page' && key !== 'priceMin' && key !== 'priceMax'
+                    ? searchParams.getAll(key).map((value) => (
+                        <Chip
+                          key={`${key}-${value}`}
+                          label={
+                            key === 'sort'
+                              ? (sortLabels[value] ?? value)
+                              : (filterLabels[value] ?? value)
+                          }
+                          onDelete={() => toggleParam(key, value)}
+                          variant="outlined"
+                          sx={{
+                            fontFamily: '"Playfair Display", serif',
+                            fontSize: '14px',
+                            border: '1px solid #000',
+                            mr: 1,
+                            mb: 1,
+                          }}
+                        />
+                      ))
+                    : null,
+                )}
 
-              {(priceMin ||
-                priceMax ||
-                Object.keys(params).some((key) => key !== 'query' && key !== 'page')) && (
-                <button
-                  className={styles.products__reset}
-                  onClick={() => {
-                    const nextParams = new URLSearchParams(searchParams);
-                    ['purpose', 'mood', 'type', 'country', 'priceMin', 'priceMax'].forEach((k) =>
-                      nextParams.delete(k),
-                    );
-                    setSearchParams(nextParams);
-                  }}
-                >
+                <button className={styles.products__reset} onClick={resetAll}>
                   Скинути
                 </button>
-              )}
-            </div>
+              </div>
+            )}
 
             <ProductsList products={products} />
           </div>
