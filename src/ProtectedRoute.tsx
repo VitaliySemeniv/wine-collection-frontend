@@ -1,9 +1,15 @@
+import { Navigate } from 'react-router-dom';
+import { isAuthenticated } from './modules/shared/utils/auth';
 import type { ReactNode } from 'react';
 
-interface ProtectedRouteProps {
+type Props = {
   children: ReactNode;
-}
+};
 
-export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ children }: Props) => {
+  if (!isAuthenticated()) {
+    return <Navigate to="/auth" replace />;
+  }
+
   return <>{children}</>;
 };
