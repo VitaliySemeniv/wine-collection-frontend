@@ -5,6 +5,7 @@ import { desktopNavLinks } from '../../../../constants/navLinks';
 import { Icon } from '../Icon';
 import { Menu } from '../Menu';
 import { useState } from 'react';
+import { isAuthenticated } from '../../utils/auth';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,6 +13,8 @@ export const Header: React.FC = () => {
 
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+
+  const isAuth = isAuthenticated();
 
   return (
     <>
@@ -59,7 +62,7 @@ export const Header: React.FC = () => {
 
           <div className={styles['header__icons-container']}>
             <NavLink
-              to="/auth"
+              to={isAuth ? '/account' : '/auth'}
               className={({ isActive }) =>
                 cn(styles['header__icon'], {
                   [styles['header__icon--active']]: isActive,

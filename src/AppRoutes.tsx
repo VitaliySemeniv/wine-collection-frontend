@@ -23,7 +23,7 @@ export const AppRoutes = () => (
       <Route path="auth" element={<AuthPage />} />
 
       <Route
-        path="/forgot-password"
+        path="forgot-password"
         element={
           <AuthLayout>
             <ForgotPassword />
