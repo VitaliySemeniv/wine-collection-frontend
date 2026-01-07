@@ -9,7 +9,7 @@ export const AboutUs = () => {
 
           <div className={styles.about__content}>
             <h3 className={styles.about__subtitle}>
-              Бібліотека вин — ваш віртуальний сомельє у світі українського вина
+              Wine collection — ваш віртуальний сомельє у світі українського вина
             </h3>
 
             <p className={styles.about__text}>
