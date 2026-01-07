@@ -17,4 +17,8 @@
       margin-block: 56px 80px;
     }
   }
+
+  &__slider-wrapper {
+    @include content-padding-inline;
+  }
 }
