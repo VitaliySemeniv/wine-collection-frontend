@@ -55,6 +55,8 @@
 
     @extend %link;
 
+    cursor: pointer;
+
     &::after {
       content: '';
       position: absolute;
