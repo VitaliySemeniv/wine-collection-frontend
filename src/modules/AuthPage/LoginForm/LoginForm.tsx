@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import styles from '../LoginForm/LoginForm.module.scss';
@@ -18,8 +17,6 @@ export const LoginForm: React.FC<Props> = ({ onSwitch }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
-
-  const navigate = useNavigate();
 
   const validate = (): boolean => {
     const newErrors: Errors = {};
@@ -94,16 +91,6 @@ export const LoginForm: React.FC<Props> = ({ onSwitch }) => {
 
         {errors.password && <span className={styles.form__error}>{errors.password}</span>}
       </div>
-
-      <p className={styles.form__forgot}>
-        <button
-          type="button"
-          className={styles.form__link}
-          onClick={() => navigate('/forgot-password', { state: { email } })}
-        >
-          Забули пароль?
-        </button>
-      </p>
 
       <button className={styles.form__button} type="submit">
         Увійти

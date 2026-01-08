@@ -1,4 +1,4 @@
-const MOCK_AUTH = true;
+const MOCK_AUTH = false;
 
 export const isAuthenticated = (): boolean => {
   if (MOCK_AUTH) return true;
