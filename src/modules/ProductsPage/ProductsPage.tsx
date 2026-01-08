@@ -51,6 +51,10 @@ export const ProductsPage = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const updateQuery = useMemo(
     () =>
       debounce((value: string) => {

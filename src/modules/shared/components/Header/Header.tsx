@@ -34,11 +34,7 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header
-        className={cn(styles.header, {
-          [styles['header--menu-open']]: isMenuOpen,
-        })}
-      >
+      <header className={styles.header}>
         <div className={styles['header__top-bar']}>
           <Link to="/" className={styles['header__logo-container']}>
             <img src={'/logo.svg'} alt={'Logo'} className={styles.header__logo} />

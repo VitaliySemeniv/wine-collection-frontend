@@ -5,17 +5,6 @@
   top: 0;
   z-index: 1000;
 
-  &--menu-open {
-    .header__top-bar {
-      background-color: $accent-muted-color;
-      box-shadow: none;
-    }
-
-    .header__icon-container {
-      background-color: $accent-muted-color;
-    }
-  }
-
   &__top-bar {
     display: flex;
     justify-content: space-between;
