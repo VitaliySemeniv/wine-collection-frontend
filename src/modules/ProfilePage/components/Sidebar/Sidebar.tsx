@@ -40,6 +40,15 @@ export const Sidebar = ({ active, onChange }: Props) => {
 
           <button
             className={cn(styles.sidebar__item, {
+              [styles['sidebar__item--active']]: active === 'password',
+            })}
+            onClick={() => onChange('password')}
+          >
+            Змінити пароль
+          </button>
+
+          <button
+            className={cn(styles.sidebar__item, {
               [styles['sidebar__item--active']]: active === 'orders',
             })}
             onClick={() => onChange('orders')}
