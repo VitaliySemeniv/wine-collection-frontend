@@ -7,14 +7,21 @@ interface Props {
 }
 
 interface Errors {
-  name?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  birthDate?: string;
   email?: string;
   password?: string;
   confirmPassword?: string;
 }
 
 export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,29 +31,33 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
   const validate = (): boolean => {
     const newErrors: Errors = {};
 
-    if (!name.trim()) {
-      newErrors.name = 'Введіть імʼя';
-    } else if (name.trim().length < 2) {
-      newErrors.name = 'Імʼя має містити мінімум 2 символи';
-    } else if (!/^[A-Za-zА-Яа-яІіЇїЄєҐґ\s'-]+$/.test(name)) {
-      newErrors.name = 'Імʼя може містити лише літери';
+    if (!firstName.trim()) {
+      newErrors.firstName = 'Введіть імʼя';
+    }
+
+    if (!lastName.trim()) {
+      newErrors.lastName = 'Введіть прізвище';
+    }
+
+    if (!phone.trim()) {
+      newErrors.phone = 'Введіть номер телефону';
+    } else if (!/^\+?\d[\d\s()-]{7,}$/.test(phone)) {
+      newErrors.phone = 'Некоректний номер телефону';
+    }
+
+    if (!birthDate) {
+      newErrors.birthDate = 'Вкажіть дату народження';
     }
 
     if (!email) {
       newErrors.email = 'Введіть електронну пошту';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'Некоректний email';
     }
 
     if (!password) {
       newErrors.password = 'Введіть пароль';
-    } else if (password.length < 6) {
-      newErrors.password = 'Пароль має містити мінімум 6 символів';
     }
 
-    if (!confirmPassword) {
-      newErrors.confirmPassword = 'Повторіть пароль';
-    } else if (confirmPassword !== password) {
+    if (confirmPassword !== password) {
       newErrors.confirmPassword = 'Паролі не співпадають';
     }
 
@@ -59,7 +70,16 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
 
     if (!validate()) return;
 
-    console.log({ name, email, password });
+    const payload = {
+      email,
+      password,
+      first_name: firstName,
+      last_name: lastName,
+      phone,
+      birth_date: birthDate,
+    };
+
+    console.log(payload);
   };
 
   return (
@@ -68,18 +88,30 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
 
       <div className={styles.form__field}>
         <input
-          className={`${styles.form__input} ${errors.name ? styles['form__input-error'] : ''}`}
+          className={`${styles.form__input} ${errors.firstName ? styles['form__input-error'] : ''}`}
           type="text"
-          name="name"
-          autoComplete="name"
           placeholder="Імʼя"
-          value={name}
+          value={firstName}
           onChange={(e) => {
-            setName(e.target.value);
-            setErrors((prev) => ({ ...prev, name: undefined }));
+            setFirstName(e.target.value);
+            setErrors((prev) => ({ ...prev, firstName: undefined }));
           }}
         />
-        {errors.name && <span className={styles.form__error}>{errors.name}</span>}
+        {errors.firstName && <span className={styles.form__error}>{errors.firstName}</span>}
+      </div>
+
+      <div className={styles.form__field}>
+        <input
+          className={`${styles.form__input} ${errors.lastName ? styles['form__input-error'] : ''}`}
+          type="text"
+          placeholder="Прізвище"
+          value={lastName}
+          onChange={(e) => {
+            setLastName(e.target.value);
+            setErrors((prev) => ({ ...prev, lastName: undefined }));
+          }}
+        />
+        {errors.lastName && <span className={styles.form__error}>{errors.lastName}</span>}
       </div>
 
       <div className={styles.form__field}>
@@ -96,6 +128,33 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
           }}
         />
         {errors.email && <span className={styles.form__error}>{errors.email}</span>}
+      </div>
+
+      <div className={styles.form__field}>
+        <input
+          className={`${styles.form__input} ${errors.phone ? styles['form__input-error'] : ''}`}
+          type="tel"
+          placeholder="Телефон"
+          value={phone}
+          onChange={(e) => {
+            setPhone(e.target.value);
+            setErrors((prev) => ({ ...prev, phone: undefined }));
+          }}
+        />
+        {errors.phone && <span className={styles.form__error}>{errors.phone}</span>}
+      </div>
+
+      <div className={styles.form__field}>
+        <input
+          className={`${styles.form__input} ${errors.birthDate ? styles['form__input-error'] : ''}`}
+          type="date"
+          value={birthDate}
+          onChange={(e) => {
+            setBirthDate(e.target.value);
+            setErrors((prev) => ({ ...prev, birthDate: undefined }));
+          }}
+        />
+        {errors.birthDate && <span className={styles.form__error}>{errors.birthDate}</span>}
       </div>
 
       <div className={styles.form__field}>
