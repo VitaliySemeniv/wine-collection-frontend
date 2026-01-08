@@ -28,7 +28,7 @@ export const mockProducts: Product[] = [
     category: 'dinner',
     type: 'white',
     country: 'Франція',
-    inStock: true,
+    inStock: false,
     mood: 'relaxing',
   },
   {

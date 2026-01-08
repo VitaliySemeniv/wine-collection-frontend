@@ -7,6 +7,22 @@ import { Menu } from '../Menu';
 import { useState } from 'react';
 import { isAuthenticated } from '../../utils/auth';
 
+const scrollToSection = (id: string) => {
+  const element = document.getElementById(id);
+  const header = document.querySelector('header');
+
+  if (!element) return;
+
+  const offset = header?.offsetHeight ?? 0;
+  const elementPosition = element.getBoundingClientRect().top;
+  const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth',
+  });
+};
+
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
@@ -18,11 +34,7 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header
-        className={cn(styles.header, {
-          [styles['header--menu-open']]: isMenuOpen,
-        })}
-      >
+      <header className={styles.header}>
         <div className={styles['header__top-bar']}>
           <Link to="/" className={styles['header__logo-container']}>
             <img src={'/logo.svg'} alt={'Logo'} className={styles.header__logo} />
@@ -46,9 +58,14 @@ export const Header: React.FC = () => {
                       {link.title}
                     </NavLink>
                   ) : (
-                    <a key={link.title} href={link.path} className={styles.header__link}>
+                    <button
+                      key={link.title}
+                      type="button"
+                      className={styles.header__link}
+                      onClick={() => scrollToSection(link.path.replace('#', ''))}
+                    >
                       {link.title}
-                    </a>
+                    </button>
                   ),
                 )}
             </ul>

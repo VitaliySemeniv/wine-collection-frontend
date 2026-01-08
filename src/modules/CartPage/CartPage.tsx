@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Back } from '../shared/components/Back';
 import { CartProduct } from './components/CartProduct';
@@ -13,6 +13,10 @@ export const CartPage = () => {
   const navigate = useNavigate();
 
   const totalPrice = cart.reduce((prev, p) => prev + p.price * p.quantity, 0);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleCheckout = () => {
     setIsModalOpen(true);

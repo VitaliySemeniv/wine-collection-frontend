@@ -7,6 +7,8 @@
   background-size: cover;
   background-position: center;
 
+  scroll-margin-top: var(--header-height);
+
   &__overlay {
     width: 100%;
     height: 100%;
@@ -36,23 +38,33 @@
   }
 
   &__content {
-    max-width: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    max-width: 580px;
     padding: 25px;
     border-radius: 20px;
 
     background: rgba(255, 255, 255, 0.85);
     text-align: justify;
+
+    @include on-desktop {
+      gap: 30px;
+    }
   }
 
   &__subtitle {
-    margin-bottom: 15px;
-
     @extend %price;
   }
 
   &__text {
-    margin-bottom: 10px;
-
     @extend %body-text-14;
+
+    @include on-desktop {
+     font-size: 18px;
+    }
   }
 }

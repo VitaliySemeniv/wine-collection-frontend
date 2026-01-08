@@ -7,19 +7,21 @@ import { Back } from '../shared/components/Back';
 import { Icon } from '../shared/components/Icon';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import type { Product } from '../../types/Product';
 import { ProductSlider } from '../HomePage/components/ProductSlider';
 import { useCart } from '../shared/context/CartContext';
+import { useRecommendedProducts } from '../shared/hooks/useRecommendedProducts';
 
 export const ProductDetailsPage = () => {
-  const [quantity, setQuantity] = useState(1);
-  const [suggested, setSuggested] = useState<Product[]>([]);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const { addToCart } = useCart();
   const { itemId } = useParams<{ itemId: string }>();
   const location = useLocation();
+  const { addToCart } = useCart();
+
+  const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const product = mockProducts.find((p) => p.id === Number(itemId));
+
+  const { products: suggested } = useRecommendedProducts();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -30,15 +32,8 @@ export const ProductDetailsPage = () => {
 
     const imageIndex = location.state?.imageIndex ?? 0;
 
-    if (product.images[imageIndex]) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedImage(product.images[imageIndex]);
-    } else {
-      setSelectedImage(product.images[0]);
-    }
-    const sameCategory = mockProducts.filter((p) => p.id !== product.id);
-
-    setSuggested([...sameCategory].sort(() => Math.random() - 0.5).slice(0, 6));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSelectedImage(product.images[imageIndex] ?? product.images[0]);
   }, [product, location.state]);
 
   if (!product) {
