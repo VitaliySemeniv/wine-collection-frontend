@@ -5,8 +5,9 @@ import { Sidebar } from './components/Sidebar';
 import { useState } from 'react';
 import { Orders } from './components/Orders';
 import { Details } from './components/Details';
+import { ChangePassword } from './components/ChangePassword';
 
-export type ProfileTab = 'details' | 'orders';
+export type ProfileTab = 'details' | 'orders' | 'password';
 
 export const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState<ProfileTab>('details');
@@ -24,6 +25,7 @@ export const ProfilePage = () => {
           <div className={styles.account__content}>
             {activeTab === 'details' && <Details />}
             {activeTab === 'orders' && <Orders />}
+            {activeTab === 'password' && <ChangePassword />}
           </div>
         </div>
       </div>

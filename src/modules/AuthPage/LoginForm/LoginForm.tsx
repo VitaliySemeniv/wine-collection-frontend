@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import styles from '../LoginForm/LoginForm.module.scss';
+import { login } from '../../shared/api/auth';
+import { saveTokens } from '../../shared/utils/auth';
+import { InputField } from '../../shared/components/InputField/InputField';
+import { PasswordField } from '../../shared/components/PasswordField/PasswordField';
 
 interface Props {
   onSwitch: () => void;
@@ -18,8 +20,6 @@ export const LoginForm: React.FC<Props> = ({ onSwitch }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
-
-  const navigate = useNavigate();
 
   const validate = (): boolean => {
     const newErrors: Errors = {};
@@ -40,70 +40,51 @@ export const LoginForm: React.FC<Props> = ({ onSwitch }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (!validate()) return;
 
-    console.log({ email, password });
+    try {
+      const tokens = await login({ email, password });
+      saveTokens(tokens.access, tokens.refresh);
+      window.location.href = '/account';
+    } catch {
+      setErrors({ password: 'Невірний email або пароль' });
+    }
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit} noValidate>
       <h1 className={styles.form__title}>Увійти</h1>
 
-      <div className={styles.form__field}>
-        <input
-          className={`${styles.form__input} ${errors.email ? styles['form__input-error'] : ''}`}
-          type="email"
-          name="email"
-          autoComplete="email"
-          placeholder="Ел. пошта"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setErrors((prev) => ({ ...prev, email: undefined }));
-          }}
-        />
-        {errors.email && <span className={styles.form__error}>{errors.email}</span>}
-      </div>
+      <InputField
+        label="Електронна пошта"
+        type="email"
+        name="email"
+        autoComplete="email"
+        placeholder="Ел. пошта"
+        value={email}
+        error={errors.email}
+        onChange={(v) => {
+          setEmail(v);
+          setErrors((p) => ({ ...p, email: undefined }));
+        }}
+      />
 
-      <div className={styles.form__field}>
-        <div className={styles.form__password}>
-          <input
-            className={`${styles.form__input} ${errors.password ? styles.form__input_error : ''}`}
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            autoComplete="current-password"
-            placeholder="Пароль"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setErrors((prev) => ({ ...prev, password: undefined }));
-            }}
-          />
-
-          <button
-            type="button"
-            className={styles.form__eye}
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? <VisibilityOff /> : <Visibility />}
-          </button>
-        </div>
-
-        {errors.password && <span className={styles.form__error}>{errors.password}</span>}
-      </div>
-
-      <p className={styles.form__forgot}>
-        <button
-          type="button"
-          className={styles.form__link}
-          onClick={() => navigate('/forgot-password', { state: { email } })}
-        >
-          Забули пароль?
-        </button>
-      </p>
+      <PasswordField
+        label="Пароль"
+        name="password"
+        autoComplete="current-password"
+        value={password}
+        placeholder="Пароль"
+        show={showPassword}
+        toggleShow={() => setShowPassword((p) => !p)}
+        error={errors.password}
+        onChange={(v) => {
+          setPassword(v);
+          setErrors((p) => ({ ...p, password: undefined }));
+        }}
+      />
 
       <button className={styles.form__button} type="submit">
         Увійти
