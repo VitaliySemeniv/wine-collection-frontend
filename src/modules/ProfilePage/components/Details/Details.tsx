@@ -1,14 +1,17 @@
+import { useEffect, useState } from 'react';
+import { getMe } from '../../../shared/api/auth';
+import type { User } from '../../../../types/User';
 import styles from './Details.module.scss';
 
-const userMock = {
-  first_name: 'Юлія',
-  last_name: 'Фітьо',
-  email: 'jylia.fito@gmail.com',
-  phone: '+380991234567',
-  birth_date: '2004-04-18',
-};
-
 export const Details = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    getMe().then(setUser);
+  }, []);
+
+  if (!user) return <p>Завантаження...</p>;
+
   return (
     <section className={styles.details}>
       <h2 className={styles.details__title}>Особисті дані</h2>
@@ -16,30 +19,32 @@ export const Details = () => {
       <div className={styles.details__list}>
         <div className={styles.details__row}>
           <span className={styles.details__label}>Імʼя</span>
-          <span className={styles.details__value}>{userMock.first_name}</span>
+          <span className={styles.details__value}>{user.first_name}</span>
         </div>
 
         <div className={styles.details__row}>
           <span className={styles.details__label}>Прізвище</span>
-          <span className={styles.details__value}>{userMock.last_name}</span>
+          <span className={styles.details__value}>{user.last_name}</span>
         </div>
 
         <div className={styles.details__row}>
           <span className={styles.details__label}>Email</span>
-          <span className={styles.details__value}>{userMock.email}</span>
+          <span className={styles.details__value}>{user.email}</span>
         </div>
 
         <div className={styles.details__row}>
           <span className={styles.details__label}>Телефон</span>
-          <span className={styles.details__value}>{userMock.phone}</span>
+          <span className={styles.details__value}>{user.phone}</span>
         </div>
 
-        <div className={styles.details__row}>
-          <span className={styles.details__label}>Дата народження</span>
-          <span className={styles.details__value}>
-            {new Date(userMock.birth_date).toLocaleDateString('uk-UA')}
-          </span>
-        </div>
+        {user.birth_date && (
+          <div className={styles.details__row}>
+            <span className={styles.details__label}>Дата народження</span>
+            <span className={styles.details__value}>
+              {new Date(user.birth_date).toLocaleDateString('uk-UA')}
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );
