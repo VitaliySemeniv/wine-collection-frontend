@@ -1,82 +1,128 @@
 import { useState } from 'react';
-import { TextField } from '@mui/material';
 import styles from './ChangePassword.module.scss';
+import { changePassword } from '../../../shared/api/auth';
+import { useSnackbar } from '../../../shared/hooks/useSnackbar';
+import { AppSnackbar } from '../../../shared/components/AppSnackbar/AppSnackbar';
+import { PasswordField } from '../../../shared/components/PasswordField/PasswordField';
 
-const textFieldSx = {
-  '& .MuiInputBase-root': {
-    fontFamily: 'inherit',
-    fontSize: '16px',
-  },
-  '& .MuiInputLabel-root': {
-    fontFamily: 'inherit',
-    color: '#6B7280',
-  },
-  '& .MuiInputLabel-root.Mui-focused': {
-    color: '#172031',
-  },
-  '& .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#E0E0E0',
-  },
-  '&:hover .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#172031',
-  },
-  '& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    borderColor: '#172031',
-  },
+type FormState = {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 };
 
+type Errors = Partial<Record<keyof FormState, string>>;
+
 export const ChangePassword = () => {
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<FormState>({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
 
-  const handleChange = (field: keyof typeof values) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValues((prev) => ({ ...prev, [field]: e.target.value }));
+  const [errors, setErrors] = useState<Errors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const { snackbar, showSuccess, showError, close } = useSnackbar();
+
+  const handleChange = (field: keyof FormState) => (value: string) => {
+    setValues((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validate = (): boolean => {
+    const newErrors: Errors = {};
+
+    if (!values.currentPassword) {
+      newErrors.currentPassword = 'Введіть поточний пароль';
+    }
+
+    if (values.newPassword.length < 6) {
+      newErrors.newPassword = 'Пароль має містити мінімум 6 символів';
+    }
+
+    if (values.newPassword !== values.confirmPassword) {
+      newErrors.confirmPassword = 'Паролі не співпадають';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(values);
+    if (!validate()) return;
+
+    try {
+      setIsSubmitting(true);
+
+      await changePassword({
+        old_password: values.currentPassword,
+        new_password: values.newPassword,
+      });
+
+      showSuccess('Пароль успішно змінено');
+
+      setValues({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
+    } catch {
+      showError('Помилка зміни пароля');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <form className={styles['change-password-form']} onSubmit={handleSubmit}>
-      <h2 className={styles['change-password-form__title']}>Зміна пароля</h2>
+    <>
+      <form className={styles['change-password-form']} onSubmit={handleSubmit}>
+        <h2 className={styles['change-password-form__title']}>Зміна пароля</h2>
 
-      <div className={styles['change-password-form__fields']}>
-        <TextField
-          label="Поточний пароль"
-          type="password"
-          value={values.currentPassword}
-          onChange={handleChange('currentPassword')}
-          fullWidth
-          sx={textFieldSx}
-        />
+        <div className={styles['change-password-form__fields']}>
+          <PasswordField
+            label="Поточний пароль"
+            value={values.currentPassword}
+            error={errors.currentPassword}
+            show={showCurrent}
+            toggleShow={() => setShowCurrent((p) => !p)}
+            onChange={handleChange('currentPassword')}
+          />
 
-        <TextField
-          label="Новий пароль"
-          type="password"
-          value={values.newPassword}
-          onChange={handleChange('newPassword')}
-          fullWidth
-          sx={textFieldSx}
-        />
+          <PasswordField
+            label="Новий пароль"
+            value={values.newPassword}
+            error={errors.newPassword}
+            show={showNew}
+            toggleShow={() => setShowNew((p) => !p)}
+            onChange={handleChange('newPassword')}
+          />
 
-        <TextField
-          label="Підтвердити новий пароль"
-          type="password"
-          value={values.confirmPassword}
-          onChange={handleChange('confirmPassword')}
-          fullWidth
-          sx={textFieldSx}
-        />
-      </div>
+          <PasswordField
+            label="Підтвердити новий пароль"
+            value={values.confirmPassword}
+            error={errors.confirmPassword}
+            show={showConfirm}
+            toggleShow={() => setShowConfirm((p) => !p)}
+            onChange={handleChange('confirmPassword')}
+          />
+        </div>
 
-      <button type="submit" className={styles['change-password-form__button']}>
-        Змінити пароль
-      </button>
-    </form>
+        <button
+          type="submit"
+          className={styles['change-password-form__button']}
+          disabled={isSubmitting}
+        >
+          Змінити пароль
+        </button>
+      </form>
+
+      <AppSnackbar {...snackbar} onClose={close} />
+    </>
   );
 };

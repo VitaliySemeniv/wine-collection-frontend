@@ -58,12 +58,14 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
       newErrors.birthDate = 'Вкажіть дату народження';
     }
 
-    if (!email) {
-      newErrors.email = 'Введіть електронну пошту';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'Некоректний email';
     }
 
     if (!password) {
       newErrors.password = 'Введіть пароль';
+    } else if (password.length < 6) {
+      newErrors.password = 'Пароль має містити мінімум 6 символів';
     }
 
     if (confirmPassword !== password) {
