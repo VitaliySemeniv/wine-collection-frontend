@@ -1,51 +1,47 @@
 import { useEffect, useState } from 'react';
-import { getMe } from '../../../shared/api/auth';
 import type { User } from '../../../../types/User';
-import styles from './Details.module.scss';
+import { DetailsView } from './DetailsView';
+import { DetailsEdit } from './DetailsEdit';
+import { useSnackbar } from '../../../shared/hooks/useSnackbar';
+import { AppSnackbar } from '../../../shared/components/AppSnackbar/AppSnackbar';
+import { getMe } from '../../../shared/api/auth';
 
 export const Details = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const { snackbar, showSuccess, showError, close } = useSnackbar();
 
   useEffect(() => {
-    getMe().then(setUser);
+    getMe()
+      .then(setUser)
+      .catch(() => {
+        showError('Не вдалося завантажити дані користувача');
+      });
   }, []);
 
   if (!user) return <p>Завантаження...</p>;
 
   return (
-    <section className={styles.details}>
-      <h2 className={styles.details__title}>Особисті дані</h2>
+    <>
+      {isEditing ? (
+        <DetailsEdit
+          user={user}
+          onCancel={() => setIsEditing(false)}
+          onSave={(updatedUser) => {
+            setUser(updatedUser);
+            setIsEditing(false);
+            showSuccess('Дані успішно оновлено');
+          }}
+          onError={() => {
+            showError('Помилка оновлення даних');
+          }}
+        />
+      ) : (
+        <DetailsView user={user} onEdit={() => setIsEditing(true)} />
+      )}
 
-      <div className={styles.details__list}>
-        <div className={styles.details__row}>
-          <span className={styles.details__label}>Імʼя</span>
-          <span className={styles.details__value}>{user.first_name}</span>
-        </div>
-
-        <div className={styles.details__row}>
-          <span className={styles.details__label}>Прізвище</span>
-          <span className={styles.details__value}>{user.last_name}</span>
-        </div>
-
-        <div className={styles.details__row}>
-          <span className={styles.details__label}>Email</span>
-          <span className={styles.details__value}>{user.email}</span>
-        </div>
-
-        <div className={styles.details__row}>
-          <span className={styles.details__label}>Телефон</span>
-          <span className={styles.details__value}>{user.phone}</span>
-        </div>
-
-        {user.birth_date && (
-          <div className={styles.details__row}>
-            <span className={styles.details__label}>Дата народження</span>
-            <span className={styles.details__value}>
-              {new Date(user.birth_date).toLocaleDateString('uk-UA')}
-            </span>
-          </div>
-        )}
-      </div>
-    </section>
+      <AppSnackbar {...snackbar} onClose={close} />
+    </>
   );
 };

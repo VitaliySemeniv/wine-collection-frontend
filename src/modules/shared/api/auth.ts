@@ -12,6 +12,7 @@ export const verifyToken = (token: string) => {
     body: JSON.stringify({ token }),
   });
 };
+
 export const login = (data: { email: string; password: string }) => {
   return request<TokenPair>('/user/token/', {
     method: 'POST',
@@ -37,16 +38,29 @@ export const getMe = () => {
   return request<User>('/user/me/');
 };
 
-export const updateMe = (
-  data: Partial<{
-    first_name: string;
-    last_name: string;
-    phone: string;
-    birth_date: string;
-  }>,
-) => {
-  return request('/user/me/', {
+export const updateMe = (data: Partial<User>) => {
+  return request<User>('/user/me/', {
     method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+};
+
+export const replaceMe = (data: {
+  email: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  birth_date: string;
+}) => {
+  return request<User>('/user/me/', {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+};
+
+export const changePassword = (data: { old_password: string; new_password: string }) => {
+  return request('/user/me/change-password/', {
+    method: 'POST',
     body: JSON.stringify(data),
   });
 };
