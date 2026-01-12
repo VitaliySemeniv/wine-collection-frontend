@@ -17,6 +17,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import debounce from 'lodash.debounce';
 import { useProducts } from '../shared/hooks/useProducts';
 import type { ProductsParams } from '../../types/ProductsParams';
+import { PageState } from '../shared/components/PageState';
 
 const buildProductsParams = (searchParams: URLSearchParams): ProductsParams => {
   return {
@@ -47,7 +48,7 @@ export const ProductsPage = () => {
 
   const productsParams = useMemo(() => buildProductsParams(searchParams), [searchParams]);
 
-  const { products, total, loading } = useProducts(productsParams);
+  const { products, total, loading, error } = useProducts(productsParams);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -146,6 +147,24 @@ export const ProductsPage = () => {
   if (loading) {
     return <Loader />;
   }
+
+  if (error) {
+    return (
+      <PageState
+        type="error"
+        message="Щось пішло не так"
+        onReload={() => window.location.reload()}
+      />
+    );
+  }
+
+  const hasQuery = Boolean(searchParams.get('query'));
+  const hasFilters =
+    hasSelectedFilters ||
+    Boolean(searchParams.get('priceMin')) ||
+    Boolean(searchParams.get('priceMax'));
+
+  const isEmpty = products.length === 0;
 
   return (
     <section className={styles.products}>
@@ -341,9 +360,20 @@ export const ProductsPage = () => {
               </div>
             )}
 
-            <ProductsList products={products} />
+            {isEmpty ? (
+              <PageState
+                type="empty"
+                message={
+                  hasQuery || hasFilters
+                    ? 'За вашим запитом нічого не знайдено 🍷'
+                    : 'Наразі товари відсутні'
+                }
+              />
+            ) : (
+              <ProductsList products={products} />
+            )}
 
-            {totalPages > 0 && (
+            {!isEmpty && totalPages > 0 && (
               <Stack alignItems="center" sx={{ mt: 4 }}>
                 <Pagination
                   count={totalPages}

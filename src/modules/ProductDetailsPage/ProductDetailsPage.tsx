@@ -12,6 +12,8 @@ import { useRecommendedProducts } from '../shared/hooks/useRecommendedProducts';
 import { ProductCard } from '../shared/components/ProductCard';
 import { valueLabels } from '../shared/constants/labels';
 import { countryLabels } from '../shared/constants/countries';
+import { NotFound } from '../shared/components/NotFound';
+import { PageState } from '../shared/components/PageState';
 // import { useCart } from '../shared/context/CartContext';
 
 export const ProductDetailsPage = () => {
@@ -42,11 +44,6 @@ export const ProductDetailsPage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [itemId]);
 
-  if (loading) return <Loader />;
-  if (error || !product) return <p>Товар не знайдено</p>;
-
-  const isAvailable = product.inStock;
-
   const getShortDescription = (description: string, sentencesCount = 2) => {
     const textLines = description
       .split('\n')
@@ -61,6 +58,24 @@ export const ProductDetailsPage = () => {
       sentences.slice(0, sentencesCount).join('. ') + (sentences.length > sentencesCount ? '.' : '')
     );
   };
+
+  if (loading) return <Loader />;
+
+  if (error) {
+    return <PageState type="error" message="Щось пішло не так" />;
+  }
+
+  if (!product) {
+    return (
+      <NotFound
+        title="Товар не знайдено"
+        imageSrc="/images/product-not-found.png"
+        alt="Product was not found"
+      />
+    );
+  }
+
+  const isAvailable = product.inStock;
 
   return (
     <section className={styles['product-details']}>
