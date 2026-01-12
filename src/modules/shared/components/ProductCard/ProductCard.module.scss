@@ -49,14 +49,25 @@
   }
 
   &__title {
-    height: 58px;
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
     padding-top: 16px;
 
     @extend %body-text-16;
+
     font-weight: 600;
 
     color: $accent-color;
     text-decoration: none;
+
+    @include on-desktop {
+      -webkit-line-clamp: unset;
+      display: block;
+    }
   }
 
   &__price {

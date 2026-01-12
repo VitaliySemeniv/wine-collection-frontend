@@ -6,10 +6,9 @@ import { ProductsList } from '../shared/components/ProductList';
 import { DropDown } from '../shared/components/DropDown/DropDown';
 import { Loader } from '../shared/components/Loader';
 import { Filters } from '../shared/components/Filters';
-import type { ProductsParams } from '../shared/api/products';
 
 import styles from './ProductsPage.module.scss';
-import { Chip, IconButton, InputAdornment, TextField } from '@mui/material';
+import { Chip, IconButton, InputAdornment, Pagination, Stack, TextField } from '@mui/material';
 import { useTheme, useMediaQuery, Button, Drawer } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
@@ -17,23 +16,25 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import debounce from 'lodash.debounce';
 import { useProducts } from '../shared/hooks/useProducts';
+import type { ProductsParams } from '../../types/ProductsParams';
 
 const buildProductsParams = (searchParams: URLSearchParams): ProductsParams => {
   return {
     query: searchParams.get('query') || undefined,
-    sort: searchParams.get('sort') || 'age',
+    sort: searchParams.get('sort') || 'price_asc',
     page: Number(searchParams.get('page') || 1),
     perPage: Number(searchParams.get('perPage') || 8),
 
-    wine: searchParams.getAll('wine'),
+    mood: searchParams.getAll('mood'),
+    wine_type: searchParams.getAll('wine_type'),
     country: searchParams.getAll('country'),
+    purpose: searchParams.getAll('purpose'),
+    category: searchParams.getAll('category'),
 
     priceMin: searchParams.get('priceMin') || undefined,
     priceMax: searchParams.get('priceMax') || undefined,
   };
 };
-
-const USE_MOCKS = true;
 
 export const ProductsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -46,10 +47,27 @@ export const ProductsPage = () => {
 
   const productsParams = useMemo(() => buildProductsParams(searchParams), [searchParams]);
 
-  const { products, total, loading } = useProducts(productsParams, USE_MOCKS);
+  const { products, total, loading } = useProducts(productsParams);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const page = Number(searchParams.get('page') || 1);
+  const perPage = Number(searchParams.get('perPage') || 8);
+
+  const totalPages = Math.ceil(total / perPage);
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (value === 1) {
+      nextParams.delete('page');
+    } else {
+      nextParams.set('page', String(value));
+    }
+
+    setSearchParams(nextParams);
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -66,7 +84,7 @@ export const ProductsPage = () => {
           nextParams.delete('query');
         }
 
-        nextParams.set('page', '1');
+        nextParams.delete('page');
         setSearchParams(nextParams);
       }, 500),
     [searchParams, setSearchParams],
@@ -85,16 +103,16 @@ export const ProductsPage = () => {
 
   const toggleParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams);
-    const current = params.getAll(key);
+    const values = params.getAll(key);
 
-    if (current.includes(value)) {
+    if (values.includes(value)) {
       params.delete(key);
-      current.filter((v) => v !== value).forEach((v) => params.append(key, v));
+      values.filter((v) => v !== value).forEach((v) => params.append(key, v));
     } else {
       params.append(key, value);
     }
 
-    params.set('page', '1');
+    params.delete('page');
     setSearchParams(params);
   };
 
@@ -103,25 +121,27 @@ export const ProductsPage = () => {
   };
 
   const filterLabels: Record<string, string> = {
-    gift: '🎁 На подарунок',
-    dinner: '🍽️ До вечері',
     celebration: '🎉 Святкування',
-    romantic: '💖 Романтичний',
-    festive: '🎄 Святковий',
-    relaxed: '😌 Розслаблений',
-  };
+    'joy & connection': '✨ Для особливих моментів',
+    'business partner': '💼 Для ділових зустрічей',
 
-  const sortLabels: Record<string, string> = {
-    age: 'Новинки',
-    title: 'Назва',
-    price: 'Від дешевих → дорогих',
+    party: '🥳 Вечірка',
+    romantic: '💖 Романтичний',
+
+    red: '🍷 Червоне',
+    white: '🥂 Біле',
+    sparkling: '🍾 Ігристе',
+
+    premium: '🌟 Преміум',
+    classic: '🍇 Класичне',
   };
 
   const priceMin = searchParams.get('priceMin');
   const priceMax = searchParams.get('priceMax');
 
-  const hasSelectedFilters =
-    priceMin || priceMax || Object.keys(params).some((key) => key !== 'query' && key !== 'page');
+  const FILTER_KEYS = ['wine_type', 'country', 'mood', 'purpose', 'category'];
+
+  const hasSelectedFilters = FILTER_KEYS.some((key) => searchParams.has(key));
 
   if (loading) {
     return <Loader />;
@@ -181,7 +201,12 @@ export const ProductsPage = () => {
               }}
               sx={{
                 mb: 4,
-                '& .MuiOutlinedInput-root': { borderRadius: '20px' },
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '20px',
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#7a1e2d',
+                  },
+                },
                 '& .MuiInputBase-input': {
                   fontFamily: '"Playfair Display", "Times New Roman", serif',
                 },
@@ -245,11 +270,12 @@ export const ProductsPage = () => {
                   <DropDown
                     label="Сортувати за:"
                     paramKey="sort"
-                    defaultValue="age"
+                    defaultValue="price_asc"
                     options={[
-                      { value: 'age', label: 'Новинки' },
-                      { value: 'title', label: 'Назва' },
-                      { value: 'price', label: 'Від дешевих → дорогих' },
+                      { value: 'price_asc', label: 'Збільшення ціни' },
+                      { value: 'price_desc', label: 'Зменшення ціни' },
+                      { value: 'name_asc', label: 'Назвою товару А-Я' },
+                      { value: 'name_desc', label: 'Назвою товару Я-А' },
                     ]}
                   />
                 </div>
@@ -291,28 +317,22 @@ export const ProductsPage = () => {
                   />
                 )}
 
-                {Object.keys(params).map((key) =>
-                  key !== 'query' && key !== 'page' && key !== 'priceMin' && key !== 'priceMax'
-                    ? searchParams.getAll(key).map((value) => (
-                        <Chip
-                          key={`${key}-${value}`}
-                          label={
-                            key === 'sort'
-                              ? (sortLabels[value] ?? value)
-                              : (filterLabels[value] ?? value)
-                          }
-                          onDelete={() => toggleParam(key, value)}
-                          variant="outlined"
-                          sx={{
-                            fontFamily: '"Playfair Display", serif',
-                            fontSize: '14px',
-                            border: '1px solid #000',
-                            mr: 1,
-                            mb: 1,
-                          }}
-                        />
-                      ))
-                    : null,
+                {FILTER_KEYS.map((key) =>
+                  searchParams.getAll(key).map((value) => (
+                    <Chip
+                      key={`${key}-${value}`}
+                      label={filterLabels[value] ?? value}
+                      onDelete={() => toggleParam(key, value)}
+                      variant="outlined"
+                      sx={{
+                        fontFamily: '"Playfair Display", serif',
+                        fontSize: '14px',
+                        border: '1px solid #000',
+                        mr: 1,
+                        mb: 1,
+                      }}
+                    />
+                  )),
                 )}
 
                 <button className={styles.products__reset} onClick={resetAll}>
@@ -322,6 +342,36 @@ export const ProductsPage = () => {
             )}
 
             <ProductsList products={products} />
+
+            {totalPages > 0 && (
+              <Stack alignItems="center" sx={{ mt: 4 }}>
+                <Pagination
+                  count={totalPages}
+                  page={page}
+                  onChange={handlePageChange}
+                  color="primary"
+                  shape="rounded"
+                  sx={{
+                    '& .MuiPaginationItem-root': {
+                      fontFamily: '"Playfair Display", serif',
+                    },
+
+                    '& .MuiPaginationItem-root.Mui-selected': {
+                      backgroundColor: '#7a1e2d',
+                      color: '#fff',
+                    },
+
+                    '& .MuiPaginationItem-root.Mui-selected:hover': {
+                      backgroundColor: '#5c1621',
+                    },
+
+                    '& .MuiPaginationItem-root:hover': {
+                      backgroundColor: '#f2e6e8',
+                    },
+                  }}
+                />
+              </Stack>
+            )}
           </div>
         </div>
       </div>

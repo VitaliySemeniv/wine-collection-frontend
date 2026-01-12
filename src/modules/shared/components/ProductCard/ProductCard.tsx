@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import type { Product } from '../../../../types/Product';
 import styles from './ProductCard.module.scss';
-import { useCart } from '../../context/CartContext';
+// import { useCart } from '../../context/CartContext';
 
 type Props = {
   product: Product;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const ProductCard: FC<Props> = ({ product }) => {
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
   const isAvailable = product.inStock;
 
   return (
@@ -33,22 +33,16 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
         <div className={styles['product-card__properties']}>
           <div className={styles['product-card__property']}>
-            <span className={styles['product-card__label']}>Країна</span>
-
-            <span className={styles['product-card__value']}>{product.country}</span>
-          </div>
-
-          <div className={styles['product-card__property']}>
             <span className={styles['product-card__label']}>Об'єм</span>
 
-            <span className={styles['product-card__value']}>{product.volume} мл</span>
+            <span className={styles['product-card__value']}>{product.volume} л</span>
           </div>
         </div>
 
         <button
           className={styles['product-card__button']}
           disabled={!isAvailable}
-          onClick={() => addToCart(product.id, 1)}
+          // onClick={() => addToCart(product.id, 1)}
         >
           {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
         </button>

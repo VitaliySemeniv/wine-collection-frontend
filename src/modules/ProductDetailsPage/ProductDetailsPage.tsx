@@ -1,5 +1,4 @@
-import { useLocation, useParams } from 'react-router-dom';
-import { mockProducts } from '../shared/mocks/products';
+import { useParams } from 'react-router-dom';
 
 import styles from './ProductDetailsPage.module.scss';
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
@@ -7,40 +6,61 @@ import { Back } from '../shared/components/Back';
 import { Icon } from '../shared/components/Icon';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { ProductSlider } from '../HomePage/components/ProductSlider';
-import { useCart } from '../shared/context/CartContext';
+import { useProduct } from '../shared/hooks/useProduct';
+import { Loader } from '../shared/components/Loader';
 import { useRecommendedProducts } from '../shared/hooks/useRecommendedProducts';
+import { ProductCard } from '../shared/components/ProductCard';
+import { valueLabels } from '../shared/constants/labels';
+import { countryLabels } from '../shared/constants/countries';
+// import { useCart } from '../shared/context/CartContext';
 
 export const ProductDetailsPage = () => {
   const { itemId } = useParams<{ itemId: string }>();
-  const location = useLocation();
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
 
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { product, loading, error } = useProduct(Number(itemId));
 
-  const product = mockProducts.find((p) => p.id === Number(itemId));
+  const { products: recommended, loading: recLoading } = useRecommendedProducts({
+    category: product?.category,
+    wine_type: product?.type,
+    mood: product?.mood,
+    excludeId: product?.id,
+  });
 
-  const { products: suggested } = useRecommendedProducts();
+  const getLabel = (value?: string) => {
+    if (!value) return '—';
+    return valueLabels[value] ?? value;
+  };
+
+  const getCountryLabel = (country?: string) => {
+    if (!country) return '—';
+    return countryLabels[country] ?? country;
+  };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [itemId]);
 
-  useEffect(() => {
-    if (!product) return;
-
-    const imageIndex = location.state?.imageIndex ?? 0;
-
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSelectedImage(product.images[imageIndex] ?? product.images[0]);
-  }, [product, location.state]);
-
-  if (!product) {
-    return <p>Товар не знайдено</p>;
-  }
+  if (loading) return <Loader />;
+  if (error || !product) return <p>Товар не знайдено</p>;
 
   const isAvailable = product.inStock;
+
+  const getShortDescription = (description: string, sentencesCount = 2) => {
+    const textLines = description
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line && !line.endsWith(':'));
+
+    if (!textLines.length) return '';
+
+    const sentences = textLines[0].split('. ');
+
+    return (
+      sentences.slice(0, sentencesCount).join('. ') + (sentences.length > sentencesCount ? '.' : '')
+    );
+  };
 
   return (
     <section className={styles['product-details']}>
@@ -53,40 +73,36 @@ export const ProductDetailsPage = () => {
           <div className={styles['product-details__main-info']}>
             <div className={styles['product-details__images-container']}>
               <div className={styles['product-details__images-column']}>
-                {product.images.map((image, i) => (
-                  <div
-                    key={i}
-                    className={`${styles['product-details__image-container']} ${
-                      selectedImage === image
-                        ? styles['product-details__image-container--active']
-                        : ''
-                    }`}
-                    onClick={() => setSelectedImage(image)}
-                  >
-                    <img
-                      className={styles['product-details__image']}
-                      src={image}
-                      alt={`${product.name} – image ${i + 1}`}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {selectedImage && (
-                <div className={styles['product-details__main-image-container']}>
+                <div
+                  className={classNames(
+                    styles['product-details__image-container'],
+                    styles['product-details__image-container--active'],
+                  )}
+                >
                   <img
-                    className={styles['product-details__main-image']}
-                    src={selectedImage}
+                    className={styles['product-details__image']}
+                    src={product.image}
                     alt={product.name}
                   />
                 </div>
-              )}
+              </div>
+
+              <div className={styles['product-details__main-image-container']}>
+                <img
+                  className={styles['product-details__main-image']}
+                  src={product.image}
+                  alt={product.name}
+                />
+              </div>
             </div>
 
             <div className={styles['product-details__content']}>
-              <h1 className={styles['product-details__title']}>{product.name}</h1>
-
-              <p className={styles['product-details__description']}>{product.description}</p>
+              <h1 className={styles['product-details__title']}>
+                {product.name}, {product.volume} л
+              </h1>
+              <p className={styles['product-details__short-description']}>
+                {getShortDescription(product.description)}
+              </p>
 
               <div className={styles['product-details__purchase']}>
                 <span className={styles['product-details__price']}>{product.price}₴</span>
@@ -118,7 +134,7 @@ export const ProductDetailsPage = () => {
                   <button
                     className={styles['product-details__button']}
                     disabled={!isAvailable}
-                    onClick={() => addToCart(product.id, quantity)}
+                    // onClick={() => addToCart(product.id, quantity)}
                   >
                     {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
                   </button>
@@ -131,33 +147,34 @@ export const ProductDetailsPage = () => {
                 <div className={styles['product-details__characteristics-wrapper']}>
                   <ul className={styles['product-details__characteristics-list']}>
                     <li className={styles['product-details__characteristics-list-item']}>
-                      <span>Категорія</span>
-
-                      <span>{product.type}</span>
-                    </li>
-
-                    <li className={styles['product-details__characteristics-list-item']}>
                       <span>Країна</span>
-
-                      <span>{product.country}</span>
+                      <span>{getCountryLabel(product.country)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Обʼєм</span>
 
-                      <span>{product.volume} мл</span>
+                      <span>{product.volume} л</span>
+                    </li>
+
+                    <li className={styles['product-details__characteristics-list-item']}>
+                      <span>Тип вина</span>
+                      <span>{getLabel(product.type)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Настрій</span>
+                      <span>{getLabel(product.mood)}</span>
+                    </li>
 
-                      <span>{product.mood}</span>
+                    <li className={styles['product-details__characteristics-list-item']}>
+                      <span>Призначення</span>
+                      <span>{getLabel(product.purpose)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Категорія</span>
-
-                      <span>{product.category}</span>
+                      <span>{getLabel(product.category)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
@@ -171,7 +188,50 @@ export const ProductDetailsPage = () => {
             </div>
           </div>
 
-          {suggested.length > 0 && <ProductSlider products={suggested} header="Рекомендації" />}
+          <div className={styles['product-details__main-info']}>
+            <div className={styles['product-details__description-wrapper']}>
+              <h2 className={styles['product-details__description-title']}>Опис</h2>
+
+              <div className={styles['product-details__description']}>
+                {product.description.split('\n').map((line, i) => {
+                  const isTitle = line.trim().endsWith(':');
+
+                  return (
+                    <p
+                      key={i}
+                      className={
+                        isTitle
+                          ? styles['product-details__description-subtitle']
+                          : styles['product-details__description-text']
+                      }
+                    >
+                      {line}
+                    </p>
+                  );
+                })}
+              </div>
+            </div>
+
+            {recommended.length > 0 && (
+              <div className={styles['product-details__recommendations']}>
+                <h2 className={styles['product-details__recommendations-title']}>
+                  Рекомендовані товари
+                </h2>
+
+                {recLoading ? (
+                  <Loader />
+                ) : (
+                  <div className={styles['product-details__products']}>
+                    {recommended.slice(0, 6).map((product) => (
+                      <div className={styles['product-details__products-item']} key={product.id}>
+                        <ProductCard product={product} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
