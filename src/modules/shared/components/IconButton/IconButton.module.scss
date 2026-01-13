@@ -18,15 +18,20 @@
 
   cursor: pointer;
 
-  @include hover(border-color, $gray-primary-color);
-
   &.rotated {
     transform: rotate(90deg);
   }
 
   &.disabled {
     opacity: 0.5;
-    border-color: $gray-elements-color;
+    border-color: var(--gray-elements-color);
     cursor: not-allowed;
   }
+}
+
+:global(.swiper-button-disabled) {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+  border-color: transparent;
 }

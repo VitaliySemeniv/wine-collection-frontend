@@ -6,6 +6,7 @@ import { Icon } from '../Icon';
 import { Menu } from '../Menu';
 import { useState } from 'react';
 import { isAuthenticated } from '../../utils/auth';
+import { useCart } from '../../hooks/useCart';
 
 const scrollToSection = (id: string) => {
   const element = document.getElementById(id);
@@ -31,6 +32,10 @@ export const Header: React.FC = () => {
   const isHomePage = location.pathname === '/';
 
   const isAuth = isAuthenticated();
+
+  const { cart } = useCart();
+
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <>
@@ -100,7 +105,7 @@ export const Header: React.FC = () => {
               <div className={styles['header__icon-wrapper']}>
                 <Icon name="cart" />
 
-                {/* {cartCount > 0 && <span className={styles['header__counter']}>{cartCount}</span>} */}
+                {cartCount > 0 && <span className={styles['header__counter']}>{cartCount}</span>}
               </div>
             </NavLink>
           </div>

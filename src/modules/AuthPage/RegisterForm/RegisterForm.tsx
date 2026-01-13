@@ -4,6 +4,8 @@ import { login, register } from '../../shared/api/auth';
 import { saveTokens } from '../../shared/utils/auth';
 import { InputField } from '../../shared/components/InputField/InputField';
 import { PasswordField } from '../../shared/components/PasswordField/PasswordField';
+import { mergeCartApi } from '../../shared/api/cart';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   onSwitch: () => void;
@@ -36,6 +38,8 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
+
+  const navigate = useNavigate();
 
   const validate = (): boolean => {
     const newErrors: Errors = {};
@@ -92,7 +96,8 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
 
       const tokens = await login({ email, password });
       saveTokens(tokens.access, tokens.refresh);
-      window.location.href = '/account';
+      await mergeCartApi();
+      navigate('/account');
     } catch (err: unknown) {
       const apiError = err as ApiError;
 

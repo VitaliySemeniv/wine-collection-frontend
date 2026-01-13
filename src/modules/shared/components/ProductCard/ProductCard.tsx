@@ -1,9 +1,10 @@
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import type { Product } from '../../../../types/Product';
 import styles from './ProductCard.module.scss';
-import { useCart } from '../../context/CartContext';
+import classNames from 'classnames';
+import { useCart } from '../../hooks/useCart';
 
 type Props = {
   product: Product;
@@ -11,8 +12,17 @@ type Props = {
 };
 
 export const ProductCard: FC<Props> = ({ product }) => {
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
+  const navigate = useNavigate();
   const isAvailable = product.inStock;
+
+  const handleClick = () => {
+    if (isInCart(product.id)) {
+      navigate('/cart');
+    } else {
+      addToCart(product.id, 1);
+    }
+  };
 
   return (
     <article className={styles['product-card']} data-out-of-stock={!isAvailable}>
@@ -33,24 +43,24 @@ export const ProductCard: FC<Props> = ({ product }) => {
 
         <div className={styles['product-card__properties']}>
           <div className={styles['product-card__property']}>
-            <span className={styles['product-card__label']}>Країна</span>
-
-            <span className={styles['product-card__value']}>{product.country}</span>
-          </div>
-
-          <div className={styles['product-card__property']}>
             <span className={styles['product-card__label']}>Об'єм</span>
 
-            <span className={styles['product-card__value']}>{product.volume} мл</span>
+            <span className={styles['product-card__value']}>{product.volume} л</span>
           </div>
         </div>
 
         <button
-          className={styles['product-card__button']}
+          className={classNames(styles['product-card__button'], {
+            [styles['product-card__button--active']]: isInCart(product.id),
+          })}
           disabled={!isAvailable}
-          onClick={() => addToCart(product.id, 1)}
+          onClick={handleClick}
         >
-          {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
+          {isAvailable
+            ? isInCart(product.id)
+              ? 'В кошику'
+              : 'Додати до кошика'
+            : 'Немає в наявності'}
         </button>
       </div>
     </article>

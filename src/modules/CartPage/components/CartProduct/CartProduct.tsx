@@ -5,21 +5,22 @@ import { Icon } from '../../../shared/components/Icon/Icon';
 import { IconButton } from '../../../shared/components/IconButton';
 
 import styles from './CartProduct.module.scss';
-import { useCart, type CartItem } from '../../../shared/context/CartContext';
+import { type CartItem } from '../../../shared/context/CartContext';
+import { useCart } from '../../../shared/hooks/useCart';
 
 type Props = {
   product: CartItem;
 };
 
 export const CartProduct: FC<Props> = ({ product }) => {
-  const { removeFromCart, changeQuantity } = useCart();
+  const { removeItemCompletely, removeOne, changeQuantity } = useCart();
 
   return (
     <article className={styles['cart-product']}>
       <div className={styles['cart-product__info']}>
         <button
           className={styles['cart-product__button']}
-          onClick={() => removeFromCart(product.itemId)}
+          onClick={() => removeItemCompletely(product.itemId)}
         >
           <Icon name="close" className={styles['cart-product__icon-close']} />
         </button>
@@ -37,7 +38,7 @@ export const CartProduct: FC<Props> = ({ product }) => {
         <div className={styles['cart-product__buttons']}>
           <IconButton
             icon="minus"
-            onClick={() => changeQuantity(product.itemId, product.quantity - 1)}
+            onClick={() => removeOne(product.itemId)}
             disabled={product.quantity === 1}
           />
 

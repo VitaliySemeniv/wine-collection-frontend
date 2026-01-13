@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 export const useSnackbar = () => {
   const [state, setState] = useState<{
@@ -7,10 +7,22 @@ export const useSnackbar = () => {
     severity: 'success' | 'error';
   }>({ open: false, message: '', severity: 'success' });
 
+  const showSuccess = useCallback((message: string) => {
+    setState({ open: true, message, severity: 'success' });
+  }, []);
+
+  const showError = useCallback((message: string) => {
+    setState({ open: true, message, severity: 'error' });
+  }, []);
+
+  const close = useCallback(() => {
+    setState((p) => ({ ...p, open: false }));
+  }, []);
+
   return {
     snackbar: state,
-    showSuccess: (message: string) => setState({ open: true, message, severity: 'success' }),
-    showError: (message: string) => setState({ open: true, message, severity: 'error' }),
-    close: () => setState((p) => ({ ...p, open: false })),
+    showSuccess,
+    showError,
+    close,
   };
 };

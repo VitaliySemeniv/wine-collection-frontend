@@ -5,16 +5,32 @@ import { useSearchParams } from 'react-router-dom';
 import styles from './Filters.module.scss';
 
 const purposes = [
-  { value: 'gift', label: '🎁 На подарунок' },
-  { value: 'dinner', label: '🍽️ До вечері' },
   { value: 'celebration', label: '🎉 Святкування' },
+  { value: 'joy & connection', label: '✨ Для особливих моментів' },
+  { value: 'business partner', label: '💼 Для ділових зустрічей' },
 ];
 
 const moods = [
+  { value: 'party', label: '🥳 Вечірка' },
   { value: 'romantic', label: '💖 Романтичний' },
-  { value: 'festive', label: '🎄 Святковий' },
-  { value: 'relaxed', label: '😌 Розслаблений' },
 ];
+
+const categories = [
+  { value: 'classic', label: '🍇 Класичне' },
+  { value: 'premium', label: '🌟 Преміум' },
+];
+
+const wineTypes = [
+  { value: 'red', label: '🍷 Червоне' },
+  { value: 'white', label: '🥂 Біле' },
+  { value: 'sparkling', label: '🍾 Ігристе' },
+];
+
+const countryLabels: Record<string, string> = {
+  France: 'Франція',
+  Italy: 'Італія',
+  Spain: 'Іспанія',
+};
 
 type FiltersProps = {
   wineOpen: boolean;
@@ -48,7 +64,7 @@ export const Filters = ({
 
     params.set('priceMin', String(min));
     params.set('priceMax', String(max));
-    params.set('page', '1');
+    params.delete('page');
 
     setSearchParams(params);
   };
@@ -107,6 +123,34 @@ export const Filters = ({
             />
           ))}
         </div>
+
+        <p className={styles.filters__subtitle}>Категорія</p>
+
+        <div className={styles.filters__chips}>
+          {categories.map((c) => (
+            <Chip
+              key={c.value}
+              label={c.label}
+              clickable
+              component="div"
+              color={selectedValues('category').includes(c.value) ? 'primary' : 'default'}
+              onClick={() => toggleParam('category', c.value)}
+              sx={{
+                fontFamily: '"Playfair Display", "Times New Roman", serif',
+                fontSize: '14px',
+                backgroundColor: selectedValues('category').includes(c.value)
+                  ? '#7a1e2d'
+                  : undefined,
+                color: selectedValues('category').includes(c.value) ? '#fff' : undefined,
+                '&:hover': {
+                  backgroundColor: selectedValues('category').includes(c.value)
+                    ? '#5c1621'
+                    : undefined,
+                },
+              }}
+            />
+          ))}
+        </div>
       </section>
 
       <section className={styles.filters__section}>
@@ -159,21 +203,23 @@ export const Filters = ({
 
           <AccordionDetails>
             <div className={styles.filters__chips}>
-              {['Червоне', 'Біле', 'Рожеве', 'Ігристе'].map((type) => (
+              {wineTypes.map((type) => (
                 <Chip
-                  key={type}
-                  label={type}
+                  key={type.value}
+                  label={type.label}
                   clickable
                   component="div"
-                  color={selectedValues('type').includes(type) ? 'primary' : 'default'}
-                  onClick={() => toggleParam('type', type)}
+                  color={selectedValues('wine_type').includes(type.value) ? 'primary' : 'default'}
+                  onClick={() => toggleParam('wine_type', type.value)}
                   sx={{
                     fontFamily: '"Playfair Display", "Times New Roman", serif',
                     fontSize: '14px',
-                    backgroundColor: selectedValues('type').includes(type) ? '#7a1e2d' : undefined,
-                    color: selectedValues('type').includes(type) ? '#fff' : undefined,
+                    backgroundColor: selectedValues('wine_type').includes(type.value)
+                      ? '#7a1e2d'
+                      : undefined,
+                    color: selectedValues('wine_type').includes(type.value) ? '#fff' : undefined,
                     '&:hover': {
-                      backgroundColor: selectedValues('type').includes(type)
+                      backgroundColor: selectedValues('wine_type').includes(type.value)
                         ? '#5c1621'
                         : undefined,
                     },
@@ -206,10 +252,10 @@ export const Filters = ({
 
           <AccordionDetails>
             <div className={styles.filters__chips}>
-              {['Франція', 'Італія', 'Іспанія', 'Україна'].map((country) => (
+              {['France', 'Italy', 'Spain'].map((country) => (
                 <Chip
                   key={country}
-                  label={country}
+                  label={countryLabels[country]}
                   clickable
                   component="div"
                   color={selectedValues('country').includes(country) ? 'primary' : 'default'}

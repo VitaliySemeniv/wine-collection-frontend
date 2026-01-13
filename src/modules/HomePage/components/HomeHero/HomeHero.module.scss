@@ -36,11 +36,12 @@
   }
 
   &__title {
+    margin-bottom: 10px;
+
     @extend %h1;
+
     color: $main-color;
     text-align: center;
-
-    margin-bottom: 10px;
 
     @include on-tablet {
       margin-bottom: 10px;
@@ -60,9 +61,9 @@
   }
 
   &__description {
-    @extend %body-text-16;
-
     margin-bottom: 30px;
+
+    @extend %body-text-16;
 
     text-align: center;
 
@@ -80,14 +81,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 240px;
+    height: 60px;
 
     @extend %button;
+
     font-size: 16px;
     color: $page-bg-color;
     background-color: $main-color;
-
-    width: 240px;
-    height: 60px;
 
     transition: all 0.4s;
     &:hover {

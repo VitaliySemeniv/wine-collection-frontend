@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react';
 import type { Product } from '../../../types/Product';
-import { fetchProducts } from '../mocks/productsApi';
+import { getWines } from '../api/wines';
 
-export const useFeaturedProducts = () => {
+type Options = {
+  category?: string;
+  wine_type?: string;
+  purpose?: string;
+  mood?: string;
+  limit?: number;
+};
+
+export const useFeaturedProducts = (options?: Options) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -10,10 +18,18 @@ export const useFeaturedProducts = () => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
 
-    fetchProducts({ sort: 'age', perPage: 6, inStock: true })
-      .then(({ products }) => setProducts(products))
+    getWines({
+      category: options?.category ? [options.category] : undefined,
+      wine_type: options?.wine_type ? [options.wine_type] : undefined,
+      purpose: options?.purpose ? [options.purpose] : undefined,
+      mood: options?.mood ? [options.mood] : undefined,
+      perPage: options?.limit ?? 3,
+    })
+      .then(({ products }) => {
+        setProducts(products);
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [options?.category, options?.wine_type, options?.purpose, options?.mood, options?.limit]);
 
   return { products, loading };
 };

@@ -18,7 +18,7 @@ export const Details = () => {
       .catch(() => {
         showError('Не вдалося завантажити дані користувача');
       });
-  }, []);
+  }, [showError]);
 
   if (!user) return <p>Завантаження...</p>;
 

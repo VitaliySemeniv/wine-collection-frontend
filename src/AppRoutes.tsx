@@ -6,6 +6,7 @@ import { AuthPage } from './modules/AuthPage';
 import { ProfilePage } from './modules/ProfilePage';
 import { ProtectedRoute } from './ProtectedRoute';
 import { ProductDetailsPage } from './modules/ProductDetailsPage';
+import { NotFoundPage } from './modules/NotFoundPage';
 import { CartPage } from './modules/CartPage';
 
 export const AppRoutes = () => (
@@ -30,6 +31,7 @@ export const AppRoutes = () => (
       />
 
       <Route path="cart" element={<CartPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Route>
   </Routes>
 );

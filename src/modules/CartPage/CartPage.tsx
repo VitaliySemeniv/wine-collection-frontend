@@ -4,15 +4,13 @@ import { Back } from '../shared/components/Back';
 import { CartProduct } from './components/CartProduct';
 
 import styles from './CartPage.module.scss';
-import { useCart } from '../shared/context/CartContext';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../shared/hooks/useCart';
 
 export const CartPage = () => {
-  const { cart, getTotalCount, clearCart } = useCart();
+  const { cart, totalPrice, clearCart } = useCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-
-  const totalPrice = cart.reduce((prev, p) => prev + p.price * p.quantity, 0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -36,6 +34,8 @@ export const CartPage = () => {
     if (count >= 2 && count <= 4) return 'товари';
     return 'товарів';
   };
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <section className={styles.cart}>
@@ -63,7 +63,7 @@ export const CartPage = () => {
 
             <img
               className={styles['cart__empty-image']}
-              src="./images/cart-is-empty.png"
+              src="/images/cart-is-empty.png"
               alt="Empty shopping cart"
             />
           </div>
@@ -79,7 +79,7 @@ export const CartPage = () => {
               <p className={styles['cart__checkout-title']}>${totalPrice}</p>
 
               <p className={styles['cart__checkout-total-price']}>
-                Разом за {getTotalCount()} {getItemsLabel(getTotalCount())}
+                Разом за {totalItems} {getItemsLabel(totalItems)}
               </p>
 
               <div className={styles['cart__checkout-line']} />

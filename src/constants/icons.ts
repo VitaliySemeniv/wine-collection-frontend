@@ -15,7 +15,7 @@ export const icons: Record<string, Icon> = {
   },
   cart: {
     title: 'Cart icon',
-    path: '/icons/cart.svg',
+    path: '/icons/trolley.png',
   },
   account: {
     title: 'Account icon',
