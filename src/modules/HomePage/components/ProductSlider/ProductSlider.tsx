@@ -1,8 +1,8 @@
+import type { FC } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-import type { FC } from 'react';
-import type { Product } from '../../../../types/Product';
 
+import type { Product } from '../../../../types/Product';
 import { ProductCard } from '../../../shared/components/ProductCard';
 import { IconButton } from '../../../shared/components/IconButton';
 

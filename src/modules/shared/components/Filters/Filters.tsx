@@ -1,6 +1,6 @@
+import { useSearchParams } from 'react-router-dom';
 import { Chip, Slider, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useSearchParams } from 'react-router-dom';
 
 import styles from './Filters.module.scss';
 

@@ -1,8 +1,9 @@
-import { Loader } from '../shared/components/Loader';
 import { useFeaturedProducts } from '../shared/hooks/useFeaturedProducts';
+import { Loader } from '../shared/components/Loader';
 import { AboutUs } from './components/AboutUs';
 import { HomeHero } from './components/HomeHero';
 import { ProductSlider } from './components/ProductSlider';
+
 import styles from './HomePage.module.scss';
 
 export const HomePage = () => {

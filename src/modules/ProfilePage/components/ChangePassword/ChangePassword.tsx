@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import styles from './ChangePassword.module.scss';
 import { changePassword } from '../../../shared/api/auth';
 import { useSnackbar } from '../../../shared/hooks/useSnackbar';
 import { AppSnackbar } from '../../../shared/components/AppSnackbar/AppSnackbar';
 import { PasswordField } from '../../../shared/components/PasswordField/PasswordField';
+import styles from './ChangePassword.module.scss';
 
 type FormState = {
   currentPassword: string;

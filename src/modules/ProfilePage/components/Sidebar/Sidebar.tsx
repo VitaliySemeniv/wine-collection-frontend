@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import cn from 'classnames';
-import styles from './Sidebar.module.scss';
-import type { ProfileTab } from '../../ProfilePage';
-import { logout } from '../../../shared/utils/auth';
 import { useNavigate } from 'react-router-dom';
+import cn from 'classnames';
+import { logout } from '../../../shared/utils/auth';
+import type { ProfileTab } from '../../ProfilePage';
+import styles from './Sidebar.module.scss';
 
 type Props = {
   active: ProfileTab;

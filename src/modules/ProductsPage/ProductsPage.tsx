@@ -1,23 +1,23 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import debounce from 'lodash.debounce';
 
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
 import { ProductsList } from '../shared/components/ProductList';
 import { DropDown } from '../shared/components/DropDown/DropDown';
 import { Loader } from '../shared/components/Loader';
 import { Filters } from '../shared/components/Filters';
+import { PageState } from '../shared/components/PageState';
+import { useProducts } from '../shared/hooks/useProducts';
+import type { ProductsParams } from '../../types/ProductsParams';
 
-import styles from './ProductsPage.module.scss';
 import { Chip, IconButton, InputAdornment, Pagination, Stack, TextField } from '@mui/material';
 import { useTheme, useMediaQuery, Button, Drawer } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 
-import debounce from 'lodash.debounce';
-import { useProducts } from '../shared/hooks/useProducts';
-import type { ProductsParams } from '../../types/ProductsParams';
-import { PageState } from '../shared/components/PageState';
+import styles from './ProductsPage.module.scss';
 
 const buildProductsParams = (searchParams: URLSearchParams): ProductsParams => {
   return {

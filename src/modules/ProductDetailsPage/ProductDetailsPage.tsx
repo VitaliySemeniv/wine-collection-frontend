@@ -1,20 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import { useProduct } from '../shared/hooks/useProduct';
+import { useCart } from '../shared/hooks/useCart';
+import { useRecommendedProducts } from '../shared/hooks/useRecommendedProducts';
 
-import styles from './ProductDetailsPage.module.scss';
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
 import { Back } from '../shared/components/Back';
 import { Icon } from '../shared/components/Icon';
-import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import { useProduct } from '../shared/hooks/useProduct';
 import { Loader } from '../shared/components/Loader';
-import { useRecommendedProducts } from '../shared/hooks/useRecommendedProducts';
 import { ProductCard } from '../shared/components/ProductCard';
-import { valueLabels } from '../shared/constants/labels';
-import { countryLabels } from '../shared/constants/countries';
 import { NotFound } from '../shared/components/NotFound';
 import { PageState } from '../shared/components/PageState';
-import { useCart } from '../shared/hooks/useCart';
+import { valueLabels } from '../shared/constants/labels';
+import { countryLabels } from '../shared/constants/countries';
+
+import styles from './ProductDetailsPage.module.scss';
 
 export const ProductDetailsPage = () => {
   const { itemId } = useParams<{ itemId: string }>();

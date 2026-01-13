@@ -1,12 +1,12 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import cn from 'classnames';
-import styles from './Header.module.scss';
-import { desktopNavLinks } from '../../../../constants/navLinks';
-import { Icon } from '../Icon';
-import { Menu } from '../Menu';
 import { useState } from 'react';
+import cn from 'classnames';
+import { desktopNavLinks } from '../../../../constants/navLinks';
 import { isAuthenticated } from '../../utils/auth';
 import { useCart } from '../../hooks/useCart';
+import { Icon } from '../Icon';
+import { Menu } from '../Menu';
+import styles from './Header.module.scss';
 
 const scrollToSection = (id: string) => {
   const element = document.getElementById(id);
