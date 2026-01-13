@@ -3,6 +3,7 @@ import cn from 'classnames';
 import styles from './Sidebar.module.scss';
 import type { ProfileTab } from '../../ProfilePage';
 import { logout } from '../../../shared/utils/auth';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   active: ProfileTab;
@@ -11,6 +12,7 @@ type Props = {
 
 export const Sidebar = ({ active, onChange }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogoutClick = () => {
     setIsModalOpen(true);
@@ -22,7 +24,7 @@ export const Sidebar = ({ active, onChange }: Props) => {
 
   const handleConfirmLogout = () => {
     logout();
-    window.location.href = '/';
+    navigate('/');
   };
 
   return (

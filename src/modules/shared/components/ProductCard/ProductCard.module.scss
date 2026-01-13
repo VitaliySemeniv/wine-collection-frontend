@@ -49,6 +49,7 @@
   }
 
   &__title {
+    height: 58px;
     display: -webkit-box;
     line-clamp: 2;
     -webkit-line-clamp: 2;
@@ -60,7 +61,6 @@
     @extend %body-text-16;
 
     font-weight: 600;
-
     color: $accent-color;
     text-decoration: none;
 
@@ -133,6 +133,7 @@
     height: 44px;
 
     @extend %button;
+
     color: $page-bg-color;
     background-color: $accent-color;
     border: 1px solid $accent-color;
@@ -148,9 +149,7 @@
     transition: all 0.4s;
     &:hover {
       box-sizing: border-box;
-      background-color: $page-bg-color;
-      color: $accent-color;
-      border: 1px solid $accent-color;
+      box-shadow: 0 3px 13px 0 #17203166;
     }
 
     &:disabled {
@@ -158,6 +157,17 @@
       border-color: $gray-elements-color;
       color: $gray-secondary-color;
       cursor: not-allowed;
+    }
+
+    &--active {
+      border: 1px solid $gray-elements-color;
+      background-color: $page-bg-color;
+      color: $accent-color;
+
+      &:hover {
+        background-color: $page-bg-color;
+        color: $accent-color;
+      }
     }
   }
 }

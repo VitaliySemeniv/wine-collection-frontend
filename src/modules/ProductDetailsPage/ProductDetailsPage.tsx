@@ -14,11 +14,11 @@ import { valueLabels } from '../shared/constants/labels';
 import { countryLabels } from '../shared/constants/countries';
 import { NotFound } from '../shared/components/NotFound';
 import { PageState } from '../shared/components/PageState';
-// import { useCart } from '../shared/context/CartContext';
+import { useCart } from '../shared/hooks/useCart';
 
 export const ProductDetailsPage = () => {
   const { itemId } = useParams<{ itemId: string }>();
-  // const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
 
   const [quantity, setQuantity] = useState(1);
   const { product, loading, error } = useProduct(Number(itemId));
@@ -57,6 +57,12 @@ export const ProductDetailsPage = () => {
     return (
       sentences.slice(0, sentencesCount).join('. ') + (sentences.length > sentencesCount ? '.' : '')
     );
+  };
+
+  const handleCartClick = () => {
+    if (!product) return;
+
+    addToCart(product.id, quantity);
   };
 
   if (loading) return <Loader />;
@@ -147,11 +153,18 @@ export const ProductDetailsPage = () => {
                   </div>
 
                   <button
-                    className={styles['product-details__button']}
+                    className={classNames(styles['product-details__button'], {
+                      [styles['product-details__button--active']]: isInCart(product.id),
+                    })}
                     disabled={!isAvailable}
-                    // onClick={() => addToCart(product.id, quantity)}
+                    onClick={handleCartClick}
                   >
-                    {isAvailable ? 'Додати до кошика' : 'Немає в наявності'}
+                    {' '}
+                    {isAvailable
+                      ? isInCart(product.id)
+                        ? 'В кошику'
+                        : 'Додати до кошика'
+                      : 'Немає в наявності'}{' '}
                   </button>
                 </div>
               </div>

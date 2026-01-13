@@ -28,8 +28,8 @@
     cursor: pointer;
 
     @extend %link;
-    color: $accent-color;
 
+    color: $accent-color;
     transition: background-color 0.2s ease;
 
     &:hover {
@@ -68,6 +68,7 @@
 
   &__modal-title {
     margin-bottom: 24px;
+
     @extend %h4;
   }
 

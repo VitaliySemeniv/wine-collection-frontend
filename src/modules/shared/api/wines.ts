@@ -6,7 +6,7 @@ import { wineDetailsMock, winesListMock } from '../mocks/wines';
 import { request } from './http';
 import { mapWineListItemToProduct, mapWineToProduct } from './mapWineToProduct';
 
-const USE_MOCKS = false;
+const USE_MOCKS = true;
 
 export const getWines = async (params: ProductsParams): Promise<ProductsResponse> => {
   if (USE_MOCKS) {

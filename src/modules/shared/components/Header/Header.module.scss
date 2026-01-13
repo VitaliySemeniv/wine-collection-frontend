@@ -104,6 +104,31 @@
     }
   }
 
+  &__icon-wrapper {
+    position: relative;
+  }
+
+  &__counter {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 16px;
+    height: 16px;
+
+    border: 1px solid $page-bg-color;
+    border-radius: 50px;
+
+    @extend %counter;
+
+    background-color: $accent-color;
+    color: $page-bg-color;
+  }
+
   &__icons-container {
     display: none;
 

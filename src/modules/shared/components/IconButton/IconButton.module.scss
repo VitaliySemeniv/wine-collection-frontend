@@ -21,6 +21,12 @@
   &.rotated {
     transform: rotate(90deg);
   }
+
+  &.disabled {
+    opacity: 0.5;
+    border-color: var(--gray-elements-color);
+    cursor: not-allowed;
+  }
 }
 
 :global(.swiper-button-disabled) {
