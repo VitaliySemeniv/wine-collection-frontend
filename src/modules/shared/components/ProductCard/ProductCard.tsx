@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import type { Product } from '../../../../types/Product';
 import styles from './ProductCard.module.scss';
@@ -13,10 +13,15 @@ type Props = {
 
 export const ProductCard: FC<Props> = ({ product }) => {
   const { addToCart, isInCart } = useCart();
+  const navigate = useNavigate();
   const isAvailable = product.inStock;
 
   const handleClick = () => {
-    addToCart(product.id, 1);
+    if (isInCart(product.id)) {
+      navigate('/cart');
+    } else {
+      addToCart(product.id, 1);
+    }
   };
 
   return (

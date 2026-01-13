@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import styles from './ProductDetailsPage.module.scss';
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
@@ -22,6 +22,8 @@ export const ProductDetailsPage = () => {
 
   const [quantity, setQuantity] = useState(1);
   const { product, loading, error } = useProduct(Number(itemId));
+
+  const navigate = useNavigate();
 
   const { products: recommended, loading: recLoading } = useRecommendedProducts({
     category: product?.category,
@@ -62,7 +64,11 @@ export const ProductDetailsPage = () => {
   const handleCartClick = () => {
     if (!product) return;
 
-    addToCart(product.id, quantity);
+    if (isInCart(product.id)) {
+      navigate('/cart');
+    } else {
+      addToCart(product.id, quantity);
+    }
   };
 
   if (loading) return <Loader />;
