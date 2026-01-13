@@ -96,7 +96,9 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
 
       const tokens = await login({ email, password });
       saveTokens(tokens.access, tokens.refresh);
+
       await mergeCartApi();
+
       navigate('/account');
     } catch (err: unknown) {
       const apiError = err as ApiError;

@@ -51,7 +51,9 @@ export const LoginForm: React.FC<Props> = ({ onSwitch }) => {
     try {
       const tokens = await login({ email, password });
       saveTokens(tokens.access, tokens.refresh);
+
       await mergeCartApi();
+
       navigate('/account');
     } catch {
       setErrors({ password: 'Невірний email або пароль' });

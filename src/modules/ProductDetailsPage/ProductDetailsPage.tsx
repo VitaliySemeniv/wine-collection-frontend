@@ -127,6 +127,7 @@ export const ProductDetailsPage = () => {
               <h1 className={styles['product-details__title']}>
                 {product.name}, {product.volume} л
               </h1>
+
               <p className={styles['product-details__short-description']}>
                 {getShortDescription(product.description)}
               </p>
@@ -182,6 +183,7 @@ export const ProductDetailsPage = () => {
                   <ul className={styles['product-details__characteristics-list']}>
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Країна</span>
+
                       <span>{getCountryLabel(product.country)}</span>
                     </li>
 
@@ -193,21 +195,25 @@ export const ProductDetailsPage = () => {
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Тип вина</span>
+
                       <span>{getLabel(product.type)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Настрій</span>
+
                       <span>{getLabel(product.mood)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Призначення</span>
+
                       <span>{getLabel(product.purpose)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Категорія</span>
+
                       <span>{getLabel(product.category)}</span>
                     </li>
 
