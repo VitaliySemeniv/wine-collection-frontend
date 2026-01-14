@@ -1,9 +1,9 @@
 import type { FC } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
 
 import type { Product } from '../../../../types/Product';
 import styles from './ProductCard.module.scss';
-import classNames from 'classnames';
 import { useCart } from '../../hooks/useCart';
 
 type Props = {

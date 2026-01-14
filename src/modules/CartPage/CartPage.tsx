@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
+import { useCart } from '../shared/hooks/useCart';
 import { Back } from '../shared/components/Back';
 import { CartProduct } from './components/CartProduct';
 
 import styles from './CartPage.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { useCart } from '../shared/hooks/useCart';
 
 export const CartPage = () => {
   const { cart, totalPrice, clearCart } = useCart();

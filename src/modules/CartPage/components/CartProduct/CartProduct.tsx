@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 import { Icon } from '../../../shared/components/Icon/Icon';
 import { IconButton } from '../../../shared/components/IconButton';
-
-import styles from './CartProduct.module.scss';
 import { type CartItem } from '../../../shared/context/CartContext';
 import { useCart } from '../../../shared/hooks/useCart';
+
+import styles from './CartProduct.module.scss';
 
 type Props = {
   product: CartItem;

@@ -1,12 +1,13 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import styles from '../LoginForm/LoginForm.module.scss';
 import { login } from '../../shared/api/auth';
+import { mergeCartApi } from '../../shared/api/cart';
 import { saveTokens } from '../../shared/utils/auth';
 import { InputField } from '../../shared/components/InputField/InputField';
 import { PasswordField } from '../../shared/components/PasswordField/PasswordField';
-import { mergeCartApi } from '../../shared/api/cart';
-import { useNavigate } from 'react-router-dom';
+
+import styles from '../LoginForm/LoginForm.module.scss';
 
 interface Props {
   onSwitch: () => void;
@@ -51,7 +52,9 @@ export const LoginForm: React.FC<Props> = ({ onSwitch }) => {
     try {
       const tokens = await login({ email, password });
       saveTokens(tokens.access, tokens.refresh);
+
       await mergeCartApi();
+
       navigate('/account');
     } catch {
       setErrors({ password: 'Невірний email або пароль' });

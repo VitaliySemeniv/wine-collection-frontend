@@ -22,6 +22,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [cart, setCart] = useState<CartItem[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const syncCart = (data: { items: CartItemApi[]; total_price: number }) => {
     setCart(data.items.map(mapApiItemToCartItem));
@@ -30,9 +31,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     const init = async () => {
-      const data = await getCartApi();
-      syncCart(data);
-      setLoading(false);
+      try {
+        const data = await getCartApi();
+        syncCart(data);
+      } catch (e) {
+        console.error('Cart load error:', e);
+        setError(true);
+        setCart([]);
+        setTotalPrice(0);
+      } finally {
+        setLoading(false);
+      }
     };
 
     init();
@@ -75,6 +84,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isInCart = (productId: number) => cart.some((item) => item.itemId === productId);
 
   if (loading) return <Loader />;
+
+  if (error) console.warn('Cart error state');
+
+  // if (error) {
+  //   return (
+  //     <PageState
+  //       type="error"
+  //       message="Щось пішло не так"
+  //       onReload={() => window.location.reload()}
+  //     />
+  //   );
+  // }
 
   return (
     <CartContext.Provider

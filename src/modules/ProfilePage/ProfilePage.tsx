@@ -1,8 +1,8 @@
 import styles from './ProfilePage.module.scss';
+import { useState } from 'react';
 
 import { Back } from '../shared/components/Back';
 import { Sidebar } from './components/Sidebar';
-import { useState } from 'react';
 import { Orders } from './components/Orders';
 import { Details } from './components/Details';
 import { ChangePassword } from './components/ChangePassword';

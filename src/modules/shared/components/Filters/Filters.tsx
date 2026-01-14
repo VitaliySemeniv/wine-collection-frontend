@@ -1,6 +1,6 @@
+import { useSearchParams } from 'react-router-dom';
 import { Chip, Slider, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useSearchParams } from 'react-router-dom';
 
 import styles from './Filters.module.scss';
 
@@ -75,6 +75,7 @@ export const Filters = ({
         <h3 className={styles.filters__title}>🪄 Віртуальний сомельє</h3>
 
         <p className={styles.filters__subtitle}>Призначення</p>
+
         <div className={styles.filters__chips}>
           {purposes.map((p) => (
             <Chip
@@ -102,6 +103,7 @@ export const Filters = ({
         </div>
 
         <p className={styles.filters__subtitle}>Настрій</p>
+
         <div className={styles.filters__chips}>
           {moods.map((m) => (
             <Chip

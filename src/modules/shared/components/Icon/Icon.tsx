@@ -1,6 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
-import { icons } from '../../../../constants/icons';
+import { icons } from '../../constants/icons';
 import styles from './Icon.module.scss';
 
 type IconName = keyof typeof icons;

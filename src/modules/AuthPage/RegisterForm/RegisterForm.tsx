@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import styles from '../LoginForm/LoginForm.module.scss';
+import { useNavigate } from 'react-router-dom';
 import { login, register } from '../../shared/api/auth';
 import { saveTokens } from '../../shared/utils/auth';
+import { mergeCartApi } from '../../shared/api/cart';
+
 import { InputField } from '../../shared/components/InputField/InputField';
 import { PasswordField } from '../../shared/components/PasswordField/PasswordField';
-import { mergeCartApi } from '../../shared/api/cart';
-import { useNavigate } from 'react-router-dom';
+
+import styles from '../LoginForm/LoginForm.module.scss';
 
 interface Props {
   onSwitch: () => void;
@@ -96,7 +98,9 @@ export const RegisterForm: React.FC<Props> = ({ onSwitch }) => {
 
       const tokens = await login({ email, password });
       saveTokens(tokens.access, tokens.refresh);
+
       await mergeCartApi();
+
       navigate('/account');
     } catch (err: unknown) {
       const apiError = err as ApiError;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
-import { AuthLayout } from './AuthLayout/AuthLayout';
+import { AuthLayout } from './AuthLayout';
 
 export const AuthPage: React.FC = () => {
   const [mode, setMode] = useState<'login' | 'register'>('login');

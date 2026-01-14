@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import cn from 'classnames';
-import { mobileNavLinks } from '../../../../constants/navLinks';
+import { mobileNavLinks } from '../../constants/navLinks';
 import styles from './Menu.module.scss';
 
 type MenuProps = {

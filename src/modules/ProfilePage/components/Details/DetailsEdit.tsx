@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import type { User } from '../../../../types/User';
 import { InputField } from '../../../shared/components/InputField/InputField';
-import styles from './Details.module.scss';
 import { updateMe } from '../../../shared/api/auth';
+import styles from './Details.module.scss';
 
 type Props = {
   user: User;

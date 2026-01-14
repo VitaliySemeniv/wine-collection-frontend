@@ -1,20 +1,21 @@
 import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import classNames from 'classnames';
+import { useProduct } from '../shared/hooks/useProduct';
+import { useCart } from '../shared/hooks/useCart';
+import { useRecommendedProducts } from '../shared/hooks/useRecommendedProducts';
 
-import styles from './ProductDetailsPage.module.scss';
 import { Breadcrumbs } from '../shared/components/Breadcrumbs';
 import { Back } from '../shared/components/Back';
 import { Icon } from '../shared/components/Icon';
-import classNames from 'classnames';
-import { useEffect, useState } from 'react';
-import { useProduct } from '../shared/hooks/useProduct';
 import { Loader } from '../shared/components/Loader';
-import { useRecommendedProducts } from '../shared/hooks/useRecommendedProducts';
 import { ProductCard } from '../shared/components/ProductCard';
-import { valueLabels } from '../shared/constants/labels';
-import { countryLabels } from '../shared/constants/countries';
 import { NotFound } from '../shared/components/NotFound';
 import { PageState } from '../shared/components/PageState';
-import { useCart } from '../shared/hooks/useCart';
+import { valueLabels } from '../shared/constants/labels';
+import { countryLabels } from '../shared/constants/countries';
+
+import styles from './ProductDetailsPage.module.scss';
 
 export const ProductDetailsPage = () => {
   const { itemId } = useParams<{ itemId: string }>();
@@ -127,6 +128,7 @@ export const ProductDetailsPage = () => {
               <h1 className={styles['product-details__title']}>
                 {product.name}, {product.volume} л
               </h1>
+
               <p className={styles['product-details__short-description']}>
                 {getShortDescription(product.description)}
               </p>
@@ -182,6 +184,7 @@ export const ProductDetailsPage = () => {
                   <ul className={styles['product-details__characteristics-list']}>
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Країна</span>
+
                       <span>{getCountryLabel(product.country)}</span>
                     </li>
 
@@ -193,21 +196,25 @@ export const ProductDetailsPage = () => {
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Тип вина</span>
+
                       <span>{getLabel(product.type)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Настрій</span>
+
                       <span>{getLabel(product.mood)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Призначення</span>
+
                       <span>{getLabel(product.purpose)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Категорія</span>
+
                       <span>{getLabel(product.category)}</span>
                     </li>
 

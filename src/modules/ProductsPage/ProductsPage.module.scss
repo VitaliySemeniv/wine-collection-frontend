@@ -1,4 +1,4 @@
-@import '../shared/utils/main';
+@import '../shared/styles/main';
 
 .products {
   &__wrapper {
@@ -82,10 +82,10 @@
   }
 
   &__reset {
-    font-family: $main-font;
-    font-size: 14px;
     width: 80px;
     height: 30px;
+    font-family: $main-font;
+    font-size: 14px;
     border-radius: 15px;
     background-color: #7a1e2d;
     color: $page-bg-color;
