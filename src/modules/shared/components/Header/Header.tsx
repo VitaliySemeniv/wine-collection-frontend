@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import cn from 'classnames';
-import { desktopNavLinks } from '../../../../constants/navLinks';
+import { desktopNavLinks } from '../../constants/navLinks';
 import { isAuthenticated } from '../../utils/auth';
 import { useCart } from '../../hooks/useCart';
 import { Icon } from '../Icon';
