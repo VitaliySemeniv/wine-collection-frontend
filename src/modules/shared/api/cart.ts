@@ -30,7 +30,7 @@ type AddToCartBody = {
   cart_id?: string;
 };
 
-const USE_MOCKS = true;
+const USE_MOCKS = false;
 
 export const getCartApi = async (): Promise<CartApiResponse> => {
   if (USE_MOCKS) {

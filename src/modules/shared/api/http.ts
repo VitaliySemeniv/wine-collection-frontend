@@ -1,6 +1,6 @@
 import { getAccessToken, getRefreshToken, saveTokens, logout } from '../utils/auth';
 
-const API_URL = 'http://localhost:8000/api';
+const API_URL = `${import.meta.env.VITE_API_URL}/api`;
 
 let isRefreshing = false;
 let refreshPromise: Promise<string> | null = null;
