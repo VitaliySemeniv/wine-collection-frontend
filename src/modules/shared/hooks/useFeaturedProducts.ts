@@ -28,6 +28,9 @@ export const useFeaturedProducts = (options?: Options) => {
       .then(({ products }) => {
         setProducts(products);
       })
+      .catch(() => {
+        setProducts([]);
+      })
       .finally(() => setLoading(false));
   }, [options?.category, options?.wine_type, options?.purpose, options?.mood, options?.limit]);
 
