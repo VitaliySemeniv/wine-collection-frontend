@@ -12,10 +12,9 @@ import { Loader } from '../shared/components/Loader';
 import { ProductCard } from '../shared/components/ProductCard';
 import { NotFound } from '../shared/components/NotFound';
 import { PageState } from '../shared/components/PageState';
-import { valueLabels } from '../shared/constants/labels';
-import { countryLabels } from '../shared/constants/countries';
 
 import styles from './ProductDetailsPage.module.scss';
+import { PRODUCT_DETAILS_LABELS } from '../shared/constants/productDetailsLabels';
 
 export const ProductDetailsPage = () => {
   const { itemId } = useParams<{ itemId: string }>();
@@ -33,14 +32,9 @@ export const ProductDetailsPage = () => {
     excludeId: product?.id,
   });
 
-  const getLabel = (value?: string) => {
+  const getLabel = (key: string, value?: string) => {
     if (!value) return '—';
-    return valueLabels[value] ?? value;
-  };
-
-  const getCountryLabel = (country?: string) => {
-    if (!country) return '—';
-    return countryLabels[country] ?? country;
+    return PRODUCT_DETAILS_LABELS[key]?.[value] ?? value;
   };
 
   useEffect(() => {
@@ -185,7 +179,7 @@ export const ProductDetailsPage = () => {
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Країна</span>
 
-                      <span>{getCountryLabel(product.country)}</span>
+                      <span>{getLabel('country', product.country)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
@@ -197,25 +191,25 @@ export const ProductDetailsPage = () => {
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Тип вина</span>
 
-                      <span>{getLabel(product.type)}</span>
+                      <span>{getLabel('wine_type', product.type)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Настрій</span>
 
-                      <span>{getLabel(product.mood)}</span>
+                      <span>{getLabel('mood', product.mood)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Призначення</span>
 
-                      <span>{getLabel(product.purpose)}</span>
+                      <span>{getLabel('purpose', product.purpose)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>
                       <span>Категорія</span>
 
-                      <span>{getLabel(product.category)}</span>
+                      <span>{getLabel('category', product.category)}</span>
                     </li>
 
                     <li className={styles['product-details__characteristics-list-item']}>

@@ -4,11 +4,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import styles from './Filters.module.scss';
 
-/**
- * ⚠️ ВАЖЛИВО:
- * value = ID з БД (а не текст!)
- */
-
 const purposes = [
   { id: '1', label: '🎉 Святкування' },
   { id: '2', label: '✨ Для особливих моментів' },
@@ -61,10 +56,10 @@ export const Filters = ({
     Number(searchParams.get('priceMax')) || 5000,
   ];
 
-  const handlePriceChange = (_: Event | React.SyntheticEvent, value: number | number[]) => {
-    if (!Array.isArray(value)) return;
+  const handlePriceChange = (_: Event | React.SyntheticEvent, newValue: number | number[]) => {
+    if (!Array.isArray(newValue)) return;
 
-    const [min, max] = value;
+    const [min, max] = newValue;
     const params = new URLSearchParams(searchParams);
 
     params.set('priceMin', String(min));
@@ -74,34 +69,84 @@ export const Filters = ({
     setSearchParams(params);
   };
 
-  const renderChips = (key: string, items: { id: string; label: string }[]) => (
-    <div className={styles.filters__chips}>
-      {items.map((item) => (
-        <Chip
-          key={item.id}
-          label={item.label}
-          clickable
-          component="div"
-          color={selectedValues(key).includes(item.id) ? 'primary' : 'default'}
-          onClick={() => toggleParam(key, item.id)}
-        />
-      ))}
-    </div>
-  );
-
   return (
     <aside className={styles.filters}>
       <section className={styles.filters__section}>
         <h3 className={styles.filters__title}>🪄 Віртуальний сомельє</h3>
 
         <p className={styles.filters__subtitle}>Призначення</p>
-        {renderChips('purpose', purposes)}
+
+        <div className={styles.filters__chips}>
+          {purposes.map((p) => (
+            <Chip
+              key={p.id}
+              label={p.label}
+              clickable
+              component="div"
+              color={selectedValues('purpose').includes(p.id) ? 'primary' : 'default'}
+              onClick={() => toggleParam('purpose', p.id)}
+              sx={{
+                fontFamily: '"Playfair Display", "Times New Roman", serif',
+                fontSize: '14px',
+                backgroundColor: selectedValues('purpose').includes(p.id) ? '#7a1e2d' : undefined,
+                color: selectedValues('purpose').includes(p.id) ? '#fff' : undefined,
+                '&:hover': {
+                  backgroundColor: selectedValues('purpose').includes(p.id) ? '#5c1621' : undefined,
+                },
+              }}
+            />
+          ))}
+        </div>
 
         <p className={styles.filters__subtitle}>Настрій</p>
-        {renderChips('moods', moods)}
+
+        <div className={styles.filters__chips}>
+          {moods.map((m) => (
+            <Chip
+              key={m.id}
+              label={m.label}
+              clickable
+              component="div"
+              color={selectedValues('mood').includes(m.id) ? 'primary' : 'default'}
+              onClick={() => toggleParam('mood', m.id)}
+              sx={{
+                fontFamily: '"Playfair Display", "Times New Roman", serif',
+                fontSize: '14px',
+                backgroundColor: selectedValues('mood').includes(m.id) ? '#7a1e2d' : undefined,
+                color: selectedValues('mood').includes(m.id) ? '#fff' : undefined,
+                '&:hover': {
+                  backgroundColor: selectedValues('mood').includes(m.id) ? '#5c1621' : undefined,
+                },
+              }}
+            />
+          ))}
+        </div>
 
         <p className={styles.filters__subtitle}>Категорія</p>
-        {renderChips('category', categories)}
+
+        <div className={styles.filters__chips}>
+          {categories.map((c) => (
+            <Chip
+              key={c.id}
+              label={c.label}
+              clickable
+              component="div"
+              color={selectedValues('category').includes(c.id) ? 'primary' : 'default'}
+              onClick={() => toggleParam('category', c.id)}
+              sx={{
+                fontFamily: '"Playfair Display", "Times New Roman", serif',
+                fontSize: '14px',
+                backgroundColor: selectedValues('category').includes(c.id) ? '#7a1e2d' : undefined,
+                color: selectedValues('category').includes(c.id) ? '#fff' : undefined,
+                '&:hover': {
+                  backgroundColor: selectedValues('category').includes(c.id)
+                    ? '#5c1621'
+                    : undefined,
+                },
+              }}
+            />
+          ))}
+        </div>
       </section>
 
       <section className={styles.filters__section}>
@@ -113,18 +158,121 @@ export const Filters = ({
           valueLabelDisplay="auto"
           min={0}
           max={5000}
+          sx={{
+            color: '#7a1e2d',
+            '& .MuiSlider-thumb': {
+              backgroundColor: '#7a1e2d',
+            },
+            '& .MuiSlider-track': {
+              backgroundColor: '#7a1e2d',
+            },
+            '& .MuiSlider-rail': {
+              backgroundColor: '#e0c2c7',
+            },
+            '& .MuiSlider-valueLabel': {
+              backgroundColor: '#7a1e2d',
+            },
+          }}
         />
       </section>
 
       <section className={styles.filters__section}>
-        <Accordion expanded={wineOpen} onChange={(_, v) => setWineOpen(v)}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Тип вина</AccordionSummary>
-          <AccordionDetails>{renderChips('wine_type', wineTypes)}</AccordionDetails>
+        <Accordion
+          disableGutters
+          expanded={wineOpen}
+          onChange={(_, isExpanded) => setWineOpen(isExpanded)}
+        >
+          <AccordionSummary
+            component="div"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              fontFamily: '"Playfair Display", "Times New Roman", serif',
+              fontSize: '14px',
+              fontWeight: 500,
+              '& .MuiAccordionSummary-content': {
+                fontFamily: '"Playfair Display", "Times New Roman", serif',
+              },
+            }}
+          >
+            Тип вина
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <div className={styles.filters__chips}>
+              {wineTypes.map((type) => (
+                <Chip
+                  key={type.id}
+                  label={type.label}
+                  clickable
+                  component="div"
+                  color={selectedValues('wine_type').includes(type.id) ? 'primary' : 'default'}
+                  onClick={() => toggleParam('wine_type', type.id)}
+                  sx={{
+                    fontFamily: '"Playfair Display", "Times New Roman", serif',
+                    fontSize: '14px',
+                    backgroundColor: selectedValues('wine_type').includes(type.id)
+                      ? '#7a1e2d'
+                      : undefined,
+                    color: selectedValues('wine_type').includes(type.id) ? '#fff' : undefined,
+                    '&:hover': {
+                      backgroundColor: selectedValues('wine_type').includes(type.id)
+                        ? '#5c1621'
+                        : undefined,
+                    },
+                  }}
+                />
+              ))}
+            </div>
+          </AccordionDetails>
         </Accordion>
 
-        <Accordion expanded={countryOpen} onChange={(_, v) => setCountryOpen(v)}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>Країна</AccordionSummary>
-          <AccordionDetails>{renderChips('country', countries)}</AccordionDetails>
+        <Accordion
+          disableGutters
+          expanded={countryOpen}
+          onChange={(_, isExpanded) => setCountryOpen(isExpanded)}
+        >
+          <AccordionSummary
+            component="div"
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              fontFamily: '"Playfair Display", "Times New Roman", serif',
+              fontSize: '14px',
+              fontWeight: 500,
+              '& .MuiAccordionSummary-content': {
+                fontFamily: '"Playfair Display", "Times New Roman", serif',
+              },
+            }}
+          >
+            Країна
+          </AccordionSummary>
+
+          <AccordionDetails>
+            <div className={styles.filters__chips}>
+              {countries.map((country) => (
+                <Chip
+                  key={country.id}
+                  label={country.label}
+                  clickable
+                  component="div"
+                  color={selectedValues('country').includes(country.id) ? 'primary' : 'default'}
+                  onClick={() => toggleParam('country', country.id)}
+                  sx={{
+                    fontFamily: '"Playfair Display", "Times New Roman", serif',
+                    fontSize: '14px',
+                    backgroundColor: selectedValues('country').includes(country.id)
+                      ? '#7a1e2d'
+                      : undefined,
+                    color: selectedValues('country').includes(country.id) ? '#fff' : undefined,
+                    '&:hover': {
+                      backgroundColor: selectedValues('country').includes(country.id)
+                        ? '#5c1621'
+                        : undefined,
+                    },
+                  }}
+                />
+              ))}
+            </div>
+          </AccordionDetails>
         </Accordion>
       </section>
     </aside>

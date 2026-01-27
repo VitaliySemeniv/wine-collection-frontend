@@ -8,30 +8,6 @@ import { mapWineListItemToProduct, mapWineToProduct } from './mapWineToProduct';
 
 const USE_MOCKS = false;
 
-const capitalize = (value: string) => value.charAt(0).toUpperCase() + value.slice(1);
-
-const PURPOSE_MAP: Record<string, string> = {
-  celebration: 'Celebration',
-  'joy & connection': 'Joy & Connection',
-  'business partner': 'Business Partner',
-};
-
-const CATEGORY_MAP: Record<string, string> = {
-  classic: 'Classic',
-  premium: 'Premium',
-};
-
-const WINE_TYPE_MAP: Record<string, string> = {
-  red: 'Red',
-  white: 'White',
-  sparkling: 'Sparkling',
-};
-
-const MOOD_MAP: Record<string, string> = {
-  party: 'Party',
-  romantic: 'Romantic',
-};
-
 export const getWines = async (params: ProductsParams): Promise<ProductsResponse> => {
   if (USE_MOCKS) {
     const products = winesListMock.results.map(mapWineListItemToProduct);
@@ -56,21 +32,11 @@ export const getWines = async (params: ProductsParams): Promise<ProductsResponse
   if (params.priceMin) query.set('min_price', params.priceMin);
   if (params.priceMax) query.set('max_price', params.priceMax);
 
-  params.mood?.forEach((mood) => query.append('mood', MOOD_MAP[mood] ?? capitalize(mood)));
-
-  params.wine_type?.forEach((type) =>
-    query.append('wine_type', WINE_TYPE_MAP[type] ?? capitalize(type)),
-  );
-
-  params.purpose?.forEach((purpose) =>
-    query.append('purpose', PURPOSE_MAP[purpose] ?? capitalize(purpose)),
-  );
-
-  params.category?.forEach((category) =>
-    query.append('category', CATEGORY_MAP[category] ?? capitalize(category)),
-  );
-
-  params.country?.forEach((country) => query.append('country', country));
+  params.mood?.forEach((id) => query.append('mood', id));
+  params.wine_type?.forEach((id) => query.append('wine_type', id));
+  params.purpose?.forEach((id) => query.append('purpose', id));
+  params.category?.forEach((id) => query.append('category', id));
+  params.country?.forEach((id) => query.append('country', id));
 
   query.set('ordering', ordering);
   query.set('limit', String(params.perPage || 8));

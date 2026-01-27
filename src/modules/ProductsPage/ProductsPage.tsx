@@ -121,20 +121,34 @@ export const ProductsPage = () => {
     setSearchParams({});
   };
 
-  const filterLabels: Record<string, string> = {
-    celebration: '🎉 Святкування',
-    'joy & connection': '✨ Для особливих моментів',
-    'business partner': '💼 Для ділових зустрічей',
+  const FILTER_LABELS: Record<string, Record<string, string>> = {
+    purpose: {
+      '1': '🎉 Святкування',
+      '2': '✨ Для особливих моментів',
+      '3': '💼 Для ділових зустрічей',
+    },
 
-    party: '🥳 Вечірка',
-    romantic: '💖 Романтичний',
+    mood: {
+      '1': '🥳 Вечірка',
+      '2': '💖 Романтичний',
+    },
 
-    red: '🍷 Червоне',
-    white: '🥂 Біле',
-    sparkling: '🍾 Ігристе',
+    category: {
+      '1': '🍇 Класичне',
+      '2': '🌟 Преміум',
+    },
 
-    premium: '🌟 Преміум',
-    classic: '🍇 Класичне',
+    wine_type: {
+      '1': '🍷 Червоне',
+      '2': '🥂 Біле',
+      '3': '🍾 Ігристе',
+    },
+
+    country: {
+      '1': '🇫🇷 Франція',
+      '2': '🇮🇹 Італія',
+      '3': '🇪🇸 Іспанія',
+    },
   };
 
   const priceMin = searchParams.get('priceMin');
@@ -340,7 +354,7 @@ export const ProductsPage = () => {
                   searchParams.getAll(key).map((value) => (
                     <Chip
                       key={`${key}-${value}`}
-                      label={filterLabels[value] ?? value}
+                      label={FILTER_LABELS[key]?.[value] ?? value}
                       onDelete={() => toggleParam(key, value)}
                       variant="outlined"
                       sx={{

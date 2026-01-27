@@ -8,7 +8,7 @@ import styles from './HomePage.module.scss';
 
 export const HomePage = () => {
   const { products, loading } = useFeaturedProducts({
-    purpose: 'celebration',
+    purpose: '1',
     limit: 6,
   });
 
