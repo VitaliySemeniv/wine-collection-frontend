@@ -15,7 +15,7 @@ const mapApiItemToCartItem = (item: CartItemApi): CartItem => ({
   name: item.wine_name,
   price: Number(item.wine_price),
   quantity: item.quantity,
-  image: '',
+  image: item.image ?? '/mock-images/prestige-chianti-docg.png',
 });
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

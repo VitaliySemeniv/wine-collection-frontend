@@ -6,7 +6,7 @@ export const mapWineListItemToProduct = (wine: WineListItemApi): Product => ({
   name: wine.name,
   volume: Number(wine.volume),
   description: '',
-  image: wine.image,
+  image: wine.image ?? '/mock-images/prestige-chianti-docg.png',
   price: Number(wine.price),
 
   category: 'classic',
@@ -23,7 +23,7 @@ export const mapWineToProduct = (wine: WineApi): Product => ({
   name: wine.name,
   volume: Number(wine.volume),
   description: wine.description ?? '',
-  image: wine.image,
+  image: wine.image ?? '/mock-images/prestige-chianti-docg.png',
   price: Number(wine.price),
 
   category: wine.category?.name?.toLowerCase() ?? '',

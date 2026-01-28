@@ -16,6 +16,7 @@ export type CartItemApi = {
   wine_price: string;
   quantity: number;
   subtotal: number;
+  image?: string;
 };
 
 export type CartApiResponse = {
