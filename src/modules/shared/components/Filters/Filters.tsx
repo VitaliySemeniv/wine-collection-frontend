@@ -3,34 +3,7 @@ import { Chip, Slider, Accordion, AccordionSummary, AccordionDetails } from '@mu
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import styles from './Filters.module.scss';
-
-const purposes = [
-  { id: '1', label: '🎉 Святкування' },
-  { id: '2', label: '✨ Для особливих моментів' },
-  { id: '3', label: '💼 Для ділових зустрічей' },
-];
-
-const moods = [
-  { id: '1', label: '🥳 Вечірка' },
-  { id: '2', label: '💖 Романтичний' },
-];
-
-const categories = [
-  { id: '1', label: '🍇 Класичне' },
-  { id: '2', label: '🌟 Преміум' },
-];
-
-const wineTypes = [
-  { id: '1', label: '🍷 Червоне' },
-  { id: '2', label: '🥂 Біле' },
-  { id: '3', label: '🍾 Ігристе' },
-];
-
-const countries = [
-  { id: '1', label: '🇫🇷 Франція' },
-  { id: '2', label: '🇮🇹 Італія' },
-  { id: '3', label: '🇪🇸 Іспанія' },
-];
+import { useFilters } from '../../hooks/useFilters';
 
 type FiltersProps = {
   wineOpen: boolean;
@@ -48,6 +21,8 @@ export const Filters = ({
   toggleParam,
 }: FiltersProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const { moods, purposes, categories, countries, wineTypes } = useFilters();
 
   const selectedValues = (key: string) => searchParams.getAll(key);
 
@@ -80,7 +55,7 @@ export const Filters = ({
           {purposes.map((p) => (
             <Chip
               key={p.id}
-              label={p.label}
+              label={p.name}
               clickable
               component="div"
               color={selectedValues('purpose').includes(p.id) ? 'primary' : 'default'}
@@ -104,7 +79,7 @@ export const Filters = ({
           {moods.map((m) => (
             <Chip
               key={m.id}
-              label={m.label}
+              label={m.name}
               clickable
               component="div"
               color={selectedValues('mood').includes(m.id) ? 'primary' : 'default'}
@@ -128,7 +103,7 @@ export const Filters = ({
           {categories.map((c) => (
             <Chip
               key={c.id}
-              label={c.label}
+              label={c.name}
               clickable
               component="div"
               color={selectedValues('category').includes(c.id) ? 'primary' : 'default'}
@@ -202,7 +177,7 @@ export const Filters = ({
               {wineTypes.map((type) => (
                 <Chip
                   key={type.id}
-                  label={type.label}
+                  label={type.name}
                   clickable
                   component="div"
                   color={selectedValues('wine_type').includes(type.id) ? 'primary' : 'default'}
@@ -251,7 +226,7 @@ export const Filters = ({
               {countries.map((country) => (
                 <Chip
                   key={country.id}
-                  label={country.label}
+                  label={country.name}
                   clickable
                   component="div"
                   color={selectedValues('country').includes(country.id) ? 'primary' : 'default'}

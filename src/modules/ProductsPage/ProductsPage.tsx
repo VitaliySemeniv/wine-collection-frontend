@@ -18,6 +18,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 
 import styles from './ProductsPage.module.scss';
+import { useFilters } from '../shared/hooks/useFilters';
 
 const buildProductsParams = (searchParams: URLSearchParams): ProductsParams => {
   return {
@@ -48,7 +49,15 @@ export const ProductsPage = () => {
 
   const productsParams = useMemo(() => buildProductsParams(searchParams), [searchParams]);
 
-  const { products, total, loading } = useProducts(productsParams);
+  const { products, total, loading: productsLoading } = useProducts(productsParams);
+  const {
+    moods,
+    purposes,
+    categories,
+    countries,
+    wineTypes,
+    loading: filtersLoading,
+  } = useFilters();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -121,35 +130,24 @@ export const ProductsPage = () => {
     setSearchParams({});
   };
 
-  const FILTER_LABELS: Record<string, Record<string, string>> = {
-    purpose: {
-      '1': '🎉 Святкування',
-      '2': '✨ Для особливих моментів',
-      '3': '💼 Для ділових зустрічей',
-    },
+  const filterLabelMap = useMemo(() => {
+    const map: Record<string, Record<string, string>> = {};
 
-    mood: {
-      '1': '🥳 Вечірка',
-      '2': '💖 Романтичний',
-    },
+    const fill = (key: string, items: { id: string; name: string }[]) => {
+      map[key] = {};
+      items.forEach((item) => {
+        map[key][item.id] = item.name;
+      });
+    };
 
-    category: {
-      '1': '🍇 Класичне',
-      '2': '🌟 Преміум',
-    },
+    fill('mood', moods);
+    fill('purpose', purposes);
+    fill('category', categories);
+    fill('country', countries);
+    fill('wine_type', wineTypes);
 
-    wine_type: {
-      '1': '🍷 Червоне',
-      '2': '🥂 Біле',
-      '3': '🍾 Ігристе',
-    },
-
-    country: {
-      '1': '🇫🇷 Франція',
-      '2': '🇮🇹 Італія',
-      '3': '🇪🇸 Іспанія',
-    },
-  };
+    return map;
+  }, [moods, purposes, categories, countries, wineTypes]);
 
   const priceMin = searchParams.get('priceMin');
   const priceMax = searchParams.get('priceMax');
@@ -158,7 +156,7 @@ export const ProductsPage = () => {
 
   const hasSelectedFilters = FILTER_KEYS.some((key) => searchParams.has(key));
 
-  if (loading) {
+  if (productsLoading || filtersLoading) {
     return <Loader />;
   }
 
@@ -354,7 +352,7 @@ export const ProductsPage = () => {
                   searchParams.getAll(key).map((value) => (
                     <Chip
                       key={`${key}-${value}`}
-                      label={FILTER_LABELS[key]?.[value] ?? value}
+                      label={filterLabelMap[key]?.[value] ?? value}
                       onDelete={() => toggleParam(key, value)}
                       variant="outlined"
                       sx={{

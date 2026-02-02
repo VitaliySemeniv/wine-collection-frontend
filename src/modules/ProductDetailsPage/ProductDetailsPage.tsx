@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { useProduct } from '../shared/hooks/useProduct';
 import { useCart } from '../shared/hooks/useCart';
@@ -14,7 +14,7 @@ import { NotFound } from '../shared/components/NotFound';
 import { PageState } from '../shared/components/PageState';
 
 import styles from './ProductDetailsPage.module.scss';
-import { PRODUCT_DETAILS_LABELS } from '../shared/constants/productDetailsLabels';
+import { useFilters } from '../shared/hooks/useFilters';
 
 export const ProductDetailsPage = () => {
   const { itemId } = useParams<{ itemId: string }>();
@@ -32,9 +32,30 @@ export const ProductDetailsPage = () => {
     excludeId: product?.id,
   });
 
+  const { moods, purposes, categories, countries, wineTypes } = useFilters();
+
+  const labelMap = useMemo(() => {
+    const map: Record<string, Record<string, string>> = {};
+
+    const fill = (key: string, items: { id: string; name: string }[]) => {
+      map[key] = {};
+      items.forEach((item) => {
+        map[key][item.id] = item.name;
+      });
+    };
+
+    fill('mood', moods);
+    fill('purpose', purposes);
+    fill('category', categories);
+    fill('country', countries);
+    fill('wine_type', wineTypes);
+
+    return map;
+  }, [moods, purposes, categories, countries, wineTypes]);
+
   const getLabel = (key: string, value?: string) => {
     if (!value) return '—';
-    return PRODUCT_DETAILS_LABELS[key]?.[value] ?? value;
+    return labelMap[key]?.[value] ?? value;
   };
 
   useEffect(() => {
